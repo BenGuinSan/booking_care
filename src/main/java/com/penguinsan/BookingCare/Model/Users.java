@@ -10,21 +10,28 @@ import java.util.List;
 @Entity
 @Data
 public class Users {
-
-    public enum Roles {
-        ADMIN,
-        DOCTOR,
-        PATIENT
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int User_Id;
-    private String UserName;
+    private String FullName;
     private String Email;
     private String Password;
-    private Roles Role;
-    private Date CreateAt;
-    private Date UpdateAt;
-    private Date DeleteAt;
+    private String Phone;
+    private float Booking_Fee;
+    private float Rating;
+    private boolean Available;
+    private boolean Gender;
+    private Date DateOfBirth;
+
+    @ManyToOne
+    @JoinColumn(name = "Role_Id")
+    public Roles Role_Id;
+
+    @ManyToOne
+    @JoinColumn(name = "Specialization_Id")
+    public Specializations Specialization_Id;
+
+    @ManyToOne
+    @JoinColumn(name = "Clinic_Id")
+    public Clinics Clinic_Id;
 }

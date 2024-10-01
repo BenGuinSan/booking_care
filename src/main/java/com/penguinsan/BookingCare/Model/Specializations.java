@@ -11,7 +11,7 @@ import java.util.List;
 public class Specializations {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int SpecializationId;
+    private int Specialization_Id;
 
     private String Name;
 
@@ -19,12 +19,10 @@ public class Specializations {
 
     private String Image;
 
-    private Date CreateAt;
+//    @OneToMany(mappedBy = "SpecializationId")
+//    private List<Doctors> doctors;
 
-    private Date UpdateAt;
-
-    private Date DeleteAt;
-
-    @OneToMany(mappedBy = "SpecializationId")
-    private List<Doctors> doctors;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private Users user;
 }

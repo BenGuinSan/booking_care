@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
+    // Truy vấn lấy ra toàn bộ danh sách Appointments
 }

@@ -14,8 +14,8 @@ public class Schedules {
     private int Schedule_Id;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctors DoctorId;
+    @JoinColumn(name = "user_id")
+    private Users User;
 
     private Date Appointment_date;
 
@@ -25,9 +25,4 @@ public class Schedules {
 
     private boolean is_booked;
 
-    private Date CreateAt;
-
-    private Date UpdateAt;
-
-    private Date DeleteAt;
 }

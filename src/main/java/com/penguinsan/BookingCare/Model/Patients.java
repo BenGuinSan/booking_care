@@ -6,32 +6,32 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Data
+//@Entity
+//@Data
 public class Patients {
-    private enum Gender{
-        MALE,
-        FEMALE,
-        OTHER
-    }
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int PatientId;
-
-    @OneToOne
-    private Users User_Id;
-
-    private String FullName;
-
-    private Date DateOfBirth;
-
-    private Gender Gender;
-
-    private String Phone;
-
-    private Date CreateAt;
-
-    private Date UpdateAt;
-
-    private Date DeleteAt;
+//    private enum Gender{
+//        MALE,
+//        FEMALE,
+//        OTHER
+//    }
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int PatientId;
+//
+//    @OneToOne
+//    private Users User_Id;
+//
+//    private String FullName;
+//
+//    private Date DateOfBirth;
+//
+//    private Gender Gender;
+//
+//    private String Phone;
+//
+//    private Date CreateAt;
+//
+//    private Date UpdateAt;
+//
+//    private Date DeleteAt;
 }

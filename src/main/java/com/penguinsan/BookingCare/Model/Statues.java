@@ -16,10 +16,4 @@ public class Statues {
     private int StatusId;
 
     private String Name;
-
-    private Date CreateAt;
-
-    private Date UpdateAt;
-
-    private Date DeleteAt;
 }
