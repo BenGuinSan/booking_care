@@ -1,5 +1,6 @@
 package com.penguinsan.BookingCare.Controller;
 
+import com.penguinsan.BookingCare.DTO.UserDTO;
 import com.penguinsan.BookingCare.Model.Users;
 import com.penguinsan.BookingCare.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class UserController {
 
     // Lấy toàn bộ danh sách User
     @GetMapping("/user")
-    public List<Users> getAllUser()
+    public List<UserDTO> getAllUser()
     {
         return UserService.getAllUser();
     }
