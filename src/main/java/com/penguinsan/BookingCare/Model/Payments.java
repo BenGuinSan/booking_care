@@ -8,6 +8,7 @@ import java.util.Date;
 @Entity
 @Data
 public class Payments {
+
     private enum Payment_method{
         CREDIT_CARD,
         PAYPAL,
@@ -28,10 +29,4 @@ public class Payments {
     private Date Payment_Date;
 
     private Payment_method Payment_method;
-
-    private Date CreateAt;
-
-    private Date UpdateAt;
-
-    private Date DeleteAt;
 }

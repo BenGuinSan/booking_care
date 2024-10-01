@@ -1,12 +1,9 @@
 package com.penguinsan.BookingCare.Controller;
 
 import com.penguinsan.BookingCare.Model.Users;
-import com.penguinsan.BookingCare.Service.DoctorsService;
 import com.penguinsan.BookingCare.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,14 +12,31 @@ public class UserController {
     @Autowired
     UserService UserService;
 
-    @RequestMapping("/")
-    public String greet(){
-        return "Hello World";
+    // Lấy toàn bộ danh sách User
+    @GetMapping("/user")
+    public List<Users> getAllUser()
+    {
+        return UserService.getAllUser();
     }
 
-    @GetMapping("/users")
-    public List<Users> getAllUsers(){
-       return UserService.getAllUsers();
+    // Lấy ra các user là doctor
+    @GetMapping("/user/doctor")
+    public List<Users> getAllDoctor()
+    {
+        return UserService.getAllDoctor();
+    }
+
+    // Lấy ra các user là patient
+    @GetMapping("/user/patient")
+    public List<Users> getAllPatient()
+    {
+        return UserService.getAllPatient();
+    }
+
+    // Lấy user theo id
+    @GetMapping("user/{id}")
+    public Users getUserById(@PathVariable int id) {
+        return UserService.findUserById(id);
     }
 
 }
