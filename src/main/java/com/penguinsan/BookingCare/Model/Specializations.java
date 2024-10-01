@@ -1,13 +1,17 @@
 package com.penguinsan.BookingCare.Model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Specializations {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,12 +1,16 @@
 package com.penguinsan.BookingCare.Model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payments {
 
     private enum Payment_method{

@@ -1,7 +1,7 @@
 package com.penguinsan.BookingCare.Model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -9,6 +9,10 @@ import java.util.Date;
 
 @Entity
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
