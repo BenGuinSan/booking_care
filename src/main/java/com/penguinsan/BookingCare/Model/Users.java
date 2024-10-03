@@ -23,12 +23,22 @@ public class Users {
     private String Email;
     private String Password;
     private String Phone;
+    private String Degree;
     private float Booking_Fee;
     private float Rating;
     private boolean Available;
     private boolean Gender;
     private Date DateOfBirth;
     private Year Experience;
+
+
+    public String getDegree() {
+        return Degree;
+    }
+
+    public void setDegree(String degree) {
+        Degree = degree;
+    }
 
     public int getUser_Id() {
         return User_Id;

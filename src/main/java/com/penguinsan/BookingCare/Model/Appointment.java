@@ -18,21 +18,17 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Appointment_Id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "patient_id")
-//    private Patients patientId;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "doctor_id")
-//    private Doctors DoctorId;
-//
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Users patient;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Users doctor;
+
     @ManyToOne
     @JoinColumn(name = "status_id")
     private Statues status;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users user;
 
     private Date Appointment_Date;
 
