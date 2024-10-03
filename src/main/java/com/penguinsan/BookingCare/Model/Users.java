@@ -25,7 +25,6 @@ public class Users {
     private String Phone;
     private String Degree;
     private float Booking_Fee;
-    private float Rating;
     private boolean Available;
     private boolean Gender;
     private Date DateOfBirth;
@@ -86,14 +85,6 @@ public class Users {
 
     public void setPhone(String phone) {
         Phone = phone;
-    }
-
-    public float getRating() {
-        return Rating;
-    }
-
-    public void setRating(float rating) {
-        Rating = rating;
     }
 
     public boolean isAvailable() {
