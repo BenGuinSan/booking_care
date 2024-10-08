@@ -5,10 +5,10 @@ import lombok.*;
 
 import java.util.List;
 
-@Entity
-@Data
 @Getter
 @Setter
+@Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Roles {
@@ -18,7 +18,6 @@ public class Roles {
 
     private String name;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "Role_Id")
     private List<Users> users;
-
 }
