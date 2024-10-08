@@ -31,103 +31,26 @@ public class Users {
     private Year Experience;
 
 
-    public String getDegree() {
-        return Degree;
-    }
-
-    public void setDegree(String degree) {
-        Degree = degree;
-    }
-
-    public int getUser_Id() {
-        return User_Id;
-    }
-
-    public void setUser_Id(int user_Id) {
-        User_Id = user_Id;
-    }
-
-    public String getFullName() {
-        return FullName;
-    }
-
-    public void setFullName(String fullName) {
-        FullName = fullName;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
-    }
-
-    public String getPassword() {
-        return Password;
-    }
-
-    public void setPassword(String password) {
-        Password = password;
-    }
-
-    public float getBooking_Fee() {
-        return Booking_Fee;
-    }
-
-    public void setBooking_Fee(float booking_Fee) {
-        Booking_Fee = booking_Fee;
-    }
-
-    public String getPhone() {
-        return Phone;
-    }
-
-    public void setPhone(String phone) {
-        Phone = phone;
-    }
-
-    public boolean isAvailable() {
-        return Available;
-    }
-
-    public void setAvailable(boolean available) {
-        Available = available;
-    }
-
-    public boolean isGender() {
-        return Gender;
-    }
-
-    public void setGender(boolean gender) {
-        Gender = gender;
-    }
-
-    public Year getExperience() {
-        return Experience;
-    }
-
-    public void setExperience(Year experience) {
-        Experience = experience;
-    }
-
-    public Date getDateOfBirth() {
-        return DateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        DateOfBirth = dateOfBirth;
-    }
-
     @ManyToOne
     @JoinColumn(name = "Role_Id")
-    public Roles Role_Id;
+    public Roles role;
 
     @ManyToOne
     @JoinColumn(name = "Specialization_Id")
-    public Specializations Specialization_Id;
+    public Specializations specialization;
 
     @ManyToOne
-    @JoinColumn(name = "Clinic_Id")
-    public Clinics Clinic_Id;
+    @JoinColumn(name = "clinic_id")
+    public Clinics clinic;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Schedules> schedules;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Appointment> patientAppointments;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private List<Appointment> doctorAppointments;
+
+
 }

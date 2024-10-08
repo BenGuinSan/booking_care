@@ -1,12 +1,10 @@
 package com.penguinsan.BookingCare.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,7 +15,10 @@ import java.util.Date;
 public class Statues {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int StatusId;
+    private int statusId;
 
-    private String Name;
+    private String name;
+
+    @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
+    private List<Appointment> appointments;
 }

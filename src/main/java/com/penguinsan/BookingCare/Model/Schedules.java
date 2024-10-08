@@ -19,13 +19,13 @@ public class Schedules {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users User;
+    private Users user;
 
-    private Date Appointment_date;
+    private Date appointment_date;
 
-    private Time Start_time;
+    private Time start_time;
 
-    private Time End_Time;
+    private Time end_Time;
 
     private boolean is_booked;
 
