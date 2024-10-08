@@ -15,18 +15,15 @@ import java.util.List;
 public class Specializations {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Specialization_Id;
+    private int specialization_Id;
 
-    private String Name;
+    private String name;
 
-    private String Description;
+    private String description;
 
-    private String Image;
+    private String image;
 
-//    @OneToMany(mappedBy = "SpecializationId")
-//    private List<Doctors> doctors;
+    @OneToMany(mappedBy = "specialization")
+    private List<Users> users;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private Users user;
 }

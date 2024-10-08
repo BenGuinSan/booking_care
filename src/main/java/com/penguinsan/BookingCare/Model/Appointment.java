@@ -16,7 +16,7 @@ import java.util.Date;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Appointment_Id;
+    private int appointment_Id;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
@@ -30,9 +30,9 @@ public class Appointment {
     @JoinColumn(name = "status_id")
     private Statues status;
 
-    private Date Appointment_Date;
+    private Date appointment_Date;
 
-    private Time Time_Slot;
+    private Time time_Slot;
 
-    private String Reason;
+    private String reason;
 }

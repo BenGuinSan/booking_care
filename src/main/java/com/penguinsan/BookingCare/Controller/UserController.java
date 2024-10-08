@@ -1,5 +1,7 @@
 package com.penguinsan.BookingCare.Controller;
 
+import com.penguinsan.BookingCare.DTO.DoctorDTO;
+import com.penguinsan.BookingCare.DTO.PatientDTO;
 import com.penguinsan.BookingCare.DTO.UserDTO;
 import com.penguinsan.BookingCare.Model.Users;
 import com.penguinsan.BookingCare.Service.UserService;
@@ -22,22 +24,16 @@ public class UserController {
 
     // Lấy ra các user là doctor
     @GetMapping("/user/doctor")
-    public List<Users> getAllDoctor()
+    public List<DoctorDTO> getAllDoctor()
     {
         return UserService.getAllDoctor();
     }
 
     // Lấy ra các user là patient
     @GetMapping("/user/patient")
-    public List<Users> getAllPatient()
+    public List<PatientDTO> getAllPatient()
     {
         return UserService.getAllPatient();
-    }
-
-    // Lấy user theo id
-    @GetMapping("user/{id}")
-    public Users getUserById(@PathVariable int id) {
-        return UserService.findUserById(id);
     }
 
 }

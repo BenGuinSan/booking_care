@@ -1,12 +1,10 @@
 package com.penguinsan.BookingCare.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,17 +15,21 @@ import java.util.Date;
 public class Clinics {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ClinicId;
+    private int clinicId;
 
-    private String Name;
+    private String name;
 
-    private String Address;
+    private String address;
 
-    private String Phone;
+    private String phone;
 
-    private String Image;
+    private String image;
 
-    private String Description;
+    private String description;
 
-    private String Introduction;
+    private String introduction;
+
+    @OneToMany(mappedBy = "clinic")
+    private List<Users> users;
+
 }
