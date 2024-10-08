@@ -29,7 +29,7 @@ public class Clinics {
 
     private String introduction;
 
-    @OneToMany(mappedBy = "clinic")
+    @OneToMany(mappedBy = "Clinic_Id")
     private List<Users> users;
 
 }
