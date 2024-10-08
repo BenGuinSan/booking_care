@@ -30,18 +30,17 @@ public class Users {
     private Date DateOfBirth;
     private Year Experience;
 
-
     @ManyToOne
     @JoinColumn(name = "Role_Id")
-    public Roles role;
+    public Roles Role_Id;
 
     @ManyToOne
     @JoinColumn(name = "Specialization_Id")
-    public Specializations specialization;
+    public Specializations Specialization_Id;
 
     @ManyToOne
-    @JoinColumn(name = "clinic_id")
-    public Clinics clinic;
+    @JoinColumn(name = "Clinic_Id")
+    public Clinics Clinic_Id;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Schedules> schedules;
@@ -51,6 +50,4 @@ public class Users {
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> doctorAppointments;
-
-
 }

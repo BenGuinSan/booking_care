@@ -1,5 +1,7 @@
 package com.penguinsan.BookingCare.Service;
 
+import com.penguinsan.BookingCare.DTO.DoctorDTO;
+import com.penguinsan.BookingCare.DTO.PatientDTO;
 import com.penguinsan.BookingCare.DTO.UserDTO;
 import com.penguinsan.BookingCare.Mapper.UserMapper;
 import com.penguinsan.BookingCare.Model.Users;
@@ -38,41 +40,33 @@ public class UserService {
     }
 
     // Lấy toàn bộ Doctor: User có Role_Id = 2
-    public List<Users> getAllDoctor()
+    public List<DoctorDTO> getAllDoctor()
     {
-        return usersRepo.findAllDoctor();
+        var doctor = usersRepo.findAllDoctor();
+        List<DoctorDTO> doctorDTOs = doctor.stream()
+                .map(userMapper::toDoctorDTO)
+                .collect(Collectors.toList());
+
+        return doctorDTOs;
     }
 
     // Lấy toàn bộ Patient: User có Role_Id = 3
-    public List<Users> getAllPatient()
+    public List<PatientDTO> getAllPatient()
     {
-        return usersRepo.findAllPatient();
+        var patient = usersRepo.findAllPatient();
+        List<PatientDTO> patientDTOs = patient.stream()
+                .map(userMapper::toPatientDTO)
+                .collect(Collectors.toList());
+        return patientDTOs;
     }
 
-    // Lấy User theo Id
-    public Users findUserById(int id)
-    {
-        return usersRepo.findById(id)
-                .orElseGet(() -> new Users());
-    }
-
-    // Tạo User mới
-    public void createUser()
+    // Thêm mới người dùng (Login)
+    public void addUser()
     {
 
     }
 
-    // Chỉnh sửa User
-    public void UpdateUser()
-    {
 
-    }
 
-    // Xóa User theo Id
-    public void DeleteUser()
-    {
 
-    }
-
-    // Thực hiện thêm bác sĩ (Admin)
 }

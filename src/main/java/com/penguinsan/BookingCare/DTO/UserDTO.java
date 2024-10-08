@@ -20,7 +20,6 @@ public class UserDTO {
     private String Password;
     private String Phone;
     private float Booking_Fee;
-    private float Rating;
     private boolean Available;
     private boolean Gender;
     private Date DateOfBirth;

@@ -1,5 +1,7 @@
 package com.penguinsan.BookingCare.Mapper;
 
+import com.penguinsan.BookingCare.DTO.DoctorDTO;
+import com.penguinsan.BookingCare.DTO.PatientDTO;
 import com.penguinsan.BookingCare.DTO.UserDTO;
 import com.penguinsan.BookingCare.Model.Users;
 import lombok.Builder;
@@ -21,6 +23,15 @@ public class UserMapper {
         return userDTO;
     }
 
+    public DoctorDTO toDoctorDTO(Users user){
+        DoctorDTO doctorDTO = modelMapper.map(user, DoctorDTO.class);
+        return doctorDTO;
+    }
+
+    public PatientDTO toPatientDTO(Users user){
+        PatientDTO patientDTO = modelMapper.map(user, PatientDTO.class);
+        return patientDTO;
+    }
 
 
 }
