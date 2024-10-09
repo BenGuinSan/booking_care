@@ -18,17 +18,17 @@ import java.util.List;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int User_Id;
-    private String FullName;
-    private String Email;
-    private String Password;
-    private String Phone;
-    private String Degree;
-    private float Booking_Fee;
-    private boolean Available;
-    private boolean Gender;
-    private Date DateOfBirth;
-    private Year Experience;
+    private int user_Id;
+    private String fullName;
+    private String email;
+    private String password;
+    private String phone;
+    private String degree;
+    private float booking_Fee;
+    private boolean available;
+    private boolean gender;
+    private Date dateOfBirth;
+    private Year experience;
 
 
     @ManyToOne
@@ -43,14 +43,14 @@ public class Users {
     @JoinColumn(name = "clinic_id")
     public Clinics clinic;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Schedules> schedules;
-
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Appointment> patientAppointments;
-
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-    private List<Appointment> doctorAppointments;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<Schedules> schedules;
+//
+//    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+//    private List<Appointment> patientAppointments;
+//
+//    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+//    private List<Appointment> doctorAppointments;
 
 
 }

@@ -24,7 +24,7 @@ public class Specializations {
     private String image;
 
 
-    @OneToMany(mappedBy = "specialization")
-    private List<Users> users;
+//    @OneToMany(mappedBy = "specialization")
+//    private List<Users> users;
 
 }

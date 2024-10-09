@@ -22,15 +22,15 @@ public class Payments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Payment_Id;
+    private int payment_Id;
 
     @OneToOne
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 
-    private float Amount;
+    private float amount;
 
-    private Date Payment_Date;
+    private Date payment_Date;
 
-    private Payment_method Payment_method;
+    private Payment_method payment_method;
 }

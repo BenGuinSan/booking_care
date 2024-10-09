@@ -15,7 +15,7 @@ import java.util.Date;
 public class Schedules {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Schedule_Id;
+    private int schedule_Id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
