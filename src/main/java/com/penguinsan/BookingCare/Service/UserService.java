@@ -60,10 +60,16 @@ public class UserService {
         return patientDTOs;
     }
 
-    // Thêm mới người dùng (Login)
-    public void addUser()
+    // Tìm kiếm người dùng theo email
+    public Optional<Users> findByEmail(String email)
     {
+        return usersRepo.findByEmail(email);
+    }
 
+//    // Kiểm tra người dùng đã tồn tại hay chưa
+    public Boolean existsByEmail(String email)
+    {
+        return usersRepo.existsByEmail(email);
     }
 
 
