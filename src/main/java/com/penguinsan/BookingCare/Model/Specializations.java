@@ -22,7 +22,4 @@ public class Specializations {
     private String description;
 
     private String image;
-
-    @OneToMany(mappedBy = "Specialization_Id")
-    private List<Users> users;
 }

@@ -20,7 +20,7 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int User_Id;
     private String FullName;
-    private String Email;
+    private String email;
     private String Password;
     private String Phone;
     private String Degree;
@@ -41,13 +41,4 @@ public class Users {
     @ManyToOne
     @JoinColumn(name = "Clinic_Id")
     public Clinics Clinic_Id;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Schedules> schedules;
-
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Appointment> patientAppointments;
-
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-    private List<Appointment> doctorAppointments;
 }
