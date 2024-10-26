@@ -18,15 +18,14 @@ public class Schedules {
     private int Schedule_Id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "doctor_id")
     private Users user;
 
-    private Date appointment_date;
+    private Date working_date;
 
     private Time start_time;
 
     private Time end_Time;
 
     private boolean is_booked;
-
 }

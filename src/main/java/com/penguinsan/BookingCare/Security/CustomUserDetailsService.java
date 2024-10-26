@@ -35,8 +35,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Users user = usersRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email not found"));
-        // thông tin của người dùng (email, mật khẩu, vai trò) sẽ được lấy ra và đóng gói vào một đối tượng UserDetails
-        return new User(
+
+        // thông tin của người dùng (email, mật khẩu, vai trò, isAvailable) sẽ được lấy ra và đóng gói vào một đối tượng UserDetails
+        return new User (
                 user.getEmail(),
                 user.getPassword(),
                 mapRolesToAuthorities(user.getRole_Id())
@@ -47,6 +48,4 @@ public class CustomUserDetailsService implements UserDetailsService {
     private Collection<GrantedAuthority> mapRolesToAuthorities(Roles role) {
         return Collections.singletonList(new SimpleGrantedAuthority(role.getName()));
     }
-
-
 }

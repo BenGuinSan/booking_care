@@ -9,6 +9,8 @@ import com.penguinsan.BookingCare.Repository.UsersRepository;
 import com.penguinsan.BookingCare.Security.JWTGenerator;
 import com.penguinsan.BookingCare.Service.RoleService;
 import com.penguinsan.BookingCare.Service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -16,12 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,8 +46,6 @@ public class AuthController {
     @Autowired
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
-
-
 
     @Autowired
     public AuthController(UserService userService, AuthenticationManager authenticationManager, RoleService roleService, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
@@ -74,8 +76,10 @@ public class AuthController {
 
         // Tạo đối tượng  người dùng mới
         Users user = new Users();
+        user.setFull_name(registerDTO.getFull_name());
         user.setEmail(registerDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        user.setAvailable(true);
 
         // Set role (patient) cho đối tượng người dùng vừa tạo
         Roles role = roleService.findRoleById(patient);
@@ -85,5 +89,18 @@ public class AuthController {
 
         return new ResponseEntity<>("User registered success", HttpStatus.OK);
     }
+
+    @PostMapping("logout")
+    public ResponseEntity<String> logout(){
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return new ResponseEntity<>("Successfully logged out", HttpStatus.OK);
+    }
+
+    @GetMapping("detail")
+    public Object userDetail(Authentication authentication){
+        String email = authentication.getName();
+        return userService.getUserDetails(email);
+    }
+
 
 }
