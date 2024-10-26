@@ -19,14 +19,17 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int User_Id;
-    private String FullName;
+    private String full_name;
     private String email;
     private String Password;
     private String Phone;
     private String Degree;
     private float Booking_Fee;
+    private String Address;
+    private String Image;
     private boolean Available;
     private boolean Gender;
+
     private Date DateOfBirth;
     private Year Experience;
 
