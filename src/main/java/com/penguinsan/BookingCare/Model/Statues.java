@@ -19,6 +19,4 @@ public class Statues {
 
     private String name;
 
-//    @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
-//    private List<Appointment> appointments;
 }

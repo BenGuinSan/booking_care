@@ -1,24 +1,41 @@
 package com.penguinsan.BookingCare.Service;
 
+import com.penguinsan.BookingCare.DTO.DoctorDTO;
+import com.penguinsan.BookingCare.DTO.PatientDTO;
 import com.penguinsan.BookingCare.DTO.UserDTO;
 import com.penguinsan.BookingCare.Mapper.UserMapper;
+import com.penguinsan.BookingCare.Model.Roles;
+import com.penguinsan.BookingCare.Model.Specializations;
 import com.penguinsan.BookingCare.Model.Users;
+import com.penguinsan.BookingCare.Repository.ClinicsRepository;
+import com.penguinsan.BookingCare.Repository.RolesRepository;
+import com.penguinsan.BookingCare.Repository.SpecializationsRepository;
 import com.penguinsan.BookingCare.Repository.UsersRepository;
-import org.hibernate.annotations.NotFound;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.ErrorResponseException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+    @Value("${doctor.id}")
+    private int doctor;
+
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    RolesRepository roleRepo;
+    @Autowired
+    SpecializationsRepository specializationRepo;
+    @Autowired
+    ClinicsRepository clinicRepo;
+
     @Autowired
     UsersRepository usersRepo;
 
@@ -37,42 +54,82 @@ public class UserService {
         return userDTOs;
     }
 
+    // Lấy thông tin của người dùng đang đăng nhập
+    public PatientDTO getUserDetails(String email) {
+        Optional<Users> userDetail = usersRepo.findByEmail(email);
+        if (userDetail.isPresent()) {
+            Users user = userDetail.get();
+            return userMapper.toPatientDTO(user);
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
+    }
+
     // Lấy toàn bộ Doctor: User có Role_Id = 2
-    public List<Users> getAllDoctor()
+    public List<DoctorDTO> getAllDoctor()
     {
-        return usersRepo.findAllDoctor();
+        var doctor = usersRepo.findAllDoctor();
+        List<DoctorDTO> doctorDTOs = doctor.stream()
+                .map(userMapper::toDoctorDTO)
+                .collect(Collectors.toList());
+        return doctorDTOs;
     }
 
     // Lấy toàn bộ Patient: User có Role_Id = 3
-    public List<Users> getAllPatient()
+    public List<PatientDTO> getAllPatient()
     {
-        return usersRepo.findAllPatient();
+        var patient = usersRepo.findAllPatient();
+        List<PatientDTO> patientDTOs = patient.stream()
+                .map(userMapper::toPatientDTO)
+                .collect(Collectors.toList());
+        return patientDTOs;
     }
 
-    // Lấy User theo Id
-    public Users findUserById(int id)
+    // Tìm kiếm người dùng theo email
+    public Optional<Users> findByEmail(String email)
     {
-        return usersRepo.findById(id)
-                .orElseGet(() -> new Users());
+        return usersRepo.findByEmail(email);
     }
 
-    // Tạo User mới
-    public void createUser()
+    // Kiểm tra người dùng đã tồn tại hay chưa
+    public Boolean existsByEmail(String email)
     {
-
+        return usersRepo.existsByEmail(email);
     }
 
-    // Chỉnh sửa User
-    public void UpdateUser()
-    {
+    // Tạo mới một bác sĩ (ADMIN)
+    public void addDoctor(DoctorDTO doctorDTO) {
+        // Role: Doctor
+        Roles role = roleRepo.findById(doctor).orElse(null);
 
+        Users user = new Users();
+        user.setFull_name(doctorDTO.getFullName());
+        user.setEmail(doctorDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(doctorDTO.getPassword()));
+        user.setDegree(doctorDTO.getDegree());
+        user.setDateOfBirth(doctorDTO.getDateOfBirth());
+        user.setAvailable(true);
+        user.setPhone(doctorDTO.getPhone());
+        user.setRole_Id(role);
+
+        user.setSpecialization_Id(doctorDTO.getSpecialization_Id());
+        user.setClinic_Id(doctorDTO.getClinic_Id());
+
+        usersRepo.save(user);
     }
 
-    // Xóa User theo Id
-    public void DeleteUser()
-    {
-
+    // Xóa một người dùng (bác sĩ/bệnh nhân)
+    public void deleteDoctor(int doctorId){
+        Optional<Users> optionalDoctorToDelete = usersRepo.findById(doctorId);
+        if (optionalDoctorToDelete.isPresent()) {
+            Users doctorToDelete = optionalDoctorToDelete.get();
+            usersRepo.delete(doctorToDelete);
+        } else {
+            throw new UsernameNotFoundException("Doctor with ID " + doctorId + " not found");
+        }
     }
 
-    // Thực hiện thêm bác sĩ (Admin)
+    // Chỉnh sửa thông tin người dùng (bác sĩ/bệnh nhân)
+
+
 }

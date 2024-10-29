@@ -18,6 +18,7 @@ import java.util.List;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int user_Id;
     private String fullName;
     private String email;
@@ -34,24 +35,16 @@ public class Users {
 
     @ManyToOne
     @JoinColumn(name = "Role_Id")
-    public Roles role;
+    public Roles Role_Id;
 
     @ManyToOne
     @JoinColumn(name = "Specialization_Id")
-    public Specializations specialization;
+    public Specializations Specialization_Id;
 
     @ManyToOne
+
     @JoinColumn(name = "clinic_id")
     public Clinics clinic;
-
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<Schedules> schedules;
-//
-//    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-//    private List<Appointment> patientAppointments;
-//
-//    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-//    private List<Appointment> doctorAppointments;
 
 
 }
