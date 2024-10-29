@@ -40,7 +40,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new User (
                 user.getEmail(),
                 user.getPassword(),
-                mapRolesToAuthorities(user.getRole_Id())
+                mapRolesToAuthorities(user.getRole())
         );
     }
 
