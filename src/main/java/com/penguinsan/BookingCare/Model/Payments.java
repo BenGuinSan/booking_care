@@ -14,10 +14,8 @@ import java.util.Date;
 public class Payments {
 
     private enum Payment_method{
-        CREDIT_CARD,
-        PAYPAL,
-        CASH,
-        BANK_TRANSFER
+        ONLINE,
+        CASH
     }
 
     @Id

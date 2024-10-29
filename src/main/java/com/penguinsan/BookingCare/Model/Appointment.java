@@ -32,7 +32,7 @@ public class Appointment {
 
     private Date appointment_Date;
 
-    private Time time_Slot;
+    private Time start_time;
 
     private String reason;
 }

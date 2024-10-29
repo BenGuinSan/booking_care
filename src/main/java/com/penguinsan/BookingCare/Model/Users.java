@@ -23,6 +23,7 @@ public class Users {
     private String email;
     private String password;
     private String phone;
+    private String image;
     private String degree;
     private float booking_Fee;
     private boolean available;

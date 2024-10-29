@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -17,15 +19,16 @@ public class Schedules {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int schedule_Id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "doctor_id")
     private Users user;
 
-    private Date appointment_date;
+
+    private LocalDate working_date;
 
     private Time start_time;
 
-    private Time end_Time;
+    private Time end_time;
 
     private boolean is_booked;
 
