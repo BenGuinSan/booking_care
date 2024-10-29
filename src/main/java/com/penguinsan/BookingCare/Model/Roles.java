@@ -17,4 +17,5 @@ public class Roles {
     private int role_Id;
 
     private String name;
+
 }

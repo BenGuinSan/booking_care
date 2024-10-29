@@ -22,15 +22,20 @@ public class UserController {
     UserService userService;
 
     // Lấy toàn bộ danh sách User
-    @GetMapping("/")
+    @GetMapping("/user")
+    @CrossOrigin(origins = "http://localhost:5173")
+
     public List<UserDTO> getAllUser()
     {
         return userService.getAllUser();
     }
 
     // Lấy ra các user là doctor
-    @GetMapping("doctor")
-    public List<DoctorDTO> getAllDoctor()
+
+    @GetMapping("/user/doctor")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public List<Users> getAllDoctor()
+
     {
         return userService.getAllDoctor();
     }
@@ -48,10 +53,20 @@ public class UserController {
     }
 
     // Lấy ra các user là patient
-    @GetMapping("patient")
-    public List<PatientDTO> getAllPatient()
+    @GetMapping("/user/patient")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public List<Users> getAllPatient()
+
     {
         return userService.getAllPatient();
+    }
+
+
+    // Lấy user theo id
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("user/{id}")
+    public Users getUserById(@PathVariable int id) {
+        return UserService.findUserById(id);
     }
 
 

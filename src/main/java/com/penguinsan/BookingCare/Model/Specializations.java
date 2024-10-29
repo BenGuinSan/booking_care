@@ -22,4 +22,5 @@ public class Specializations {
     private String description;
 
     private String image;
+
 }

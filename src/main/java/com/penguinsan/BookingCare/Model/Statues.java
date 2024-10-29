@@ -18,4 +18,5 @@ public class Statues {
     private int statusId;
 
     private String name;
+
 }

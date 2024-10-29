@@ -2,11 +2,22 @@ package com.penguinsan.BookingCare.Repository;
 
 import com.penguinsan.BookingCare.Model.Schedules;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface SchedulesRepository extends JpaRepository<Schedules, Integer> {
-    // Truy vấn lấy toàn bộ lịch có trong hệ thống
 
-    // Truy vấn lấy toàn bộ lịch của 1 bác sĩ
+    @Query("SELECT s FROM Schedules s " +
+            "WHERE s.user.role.role_Id = 2 " +
+            "AND s.user.user_Id = ?1 " +
+            "AND s.is_booked = false " +
+            "AND (s.working_date > CURRENT_DATE OR (s.working_date = CURRENT_DATE AND s.start_time >= CURRENT_TIME)) " +
+            "ORDER BY s.start_time ASC")
+    List<Schedules> getSchedulesByDoctorIdIsBooked(int id);
+
+
+
 }
