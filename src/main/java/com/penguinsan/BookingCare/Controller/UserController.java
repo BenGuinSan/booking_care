@@ -34,7 +34,7 @@ public class UserController {
 
     @GetMapping("/user/doctor")
     @CrossOrigin(origins = "http://localhost:5173")
-    public List<Users> getAllDoctor()
+    public List<DoctorDTO> getAllDoctor()
 
     {
         return userService.getAllDoctor();
@@ -55,7 +55,7 @@ public class UserController {
     // Lấy ra các user là patient
     @GetMapping("/user/patient")
     @CrossOrigin(origins = "http://localhost:5173")
-    public List<Users> getAllPatient()
+    public List<PatientDTO> getAllPatient()
 
     {
         return userService.getAllPatient();
