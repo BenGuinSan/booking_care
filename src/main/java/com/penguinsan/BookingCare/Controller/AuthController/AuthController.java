@@ -83,7 +83,7 @@ public class AuthController {
 
         // Set role (patient) cho đối tượng người dùng vừa tạo
         Roles role = roleService.findRoleById(patient);
-        user.setRole_Id(role);
+        user.setRole(role);
 
         userRepo.save(user);
 

@@ -18,33 +18,30 @@ import java.util.List;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int user_Id;
-    private String fullName;
+    private String full_name;
     private String email;
-    private String password;
-    private String phone;
-    private String image;
-    private String degree;
-    private float booking_Fee;
-    private boolean available;
-    private boolean gender;
-    private Date dateOfBirth;
-    private Year experience;
+    private String Password;
+    private String Phone;
+    private String Degree;
+    private float Booking_Fee;
+    private String Address;
+    private String Image;
+    private boolean Available;
+    private boolean Gender;
 
+    private Date DateOfBirth;
+    private Year Experience;
 
     @ManyToOne
     @JoinColumn(name = "Role_Id")
-    public Roles Role_Id;
+    public Roles role;
 
     @ManyToOne
     @JoinColumn(name = "Specialization_Id")
-    public Specializations Specialization_Id;
+    public Specializations specialization;
 
     @ManyToOne
-
-    @JoinColumn(name = "clinic_id")
+    @JoinColumn(name = "Clinic_Id")
     public Clinics clinic;
-
-
 }

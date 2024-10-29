@@ -91,6 +91,11 @@ public class UserService {
         return usersRepo.findByEmail(email);
     }
 
+    // Tìm kiếm người dùng theo id
+    public Users findUserById(int id){
+        return usersRepo.findById(id).orElse(new Users());
+    }
+
     // Kiểm tra người dùng đã tồn tại hay chưa
     public Boolean existsByEmail(String email)
     {
@@ -110,10 +115,10 @@ public class UserService {
         user.setDateOfBirth(doctorDTO.getDateOfBirth());
         user.setAvailable(true);
         user.setPhone(doctorDTO.getPhone());
-        user.setRole_Id(role);
+        user.setRole(role);
 
-        user.setSpecialization_Id(doctorDTO.getSpecialization_Id());
-        user.setClinic_Id(doctorDTO.getClinic_Id());
+        user.setSpecialization(doctorDTO.getSpecialization_Id());
+        user.setClinic(doctorDTO.getClinic_Id());
 
         usersRepo.save(user);
     }

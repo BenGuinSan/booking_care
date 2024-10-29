@@ -15,7 +15,7 @@ import java.util.List;
 public class Statues {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int statusId;
+    private int status_Id;
 
     private String name;
 
