@@ -21,6 +21,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
+
+
     // Lấy toàn bộ danh sách User
     @GetMapping("/user")
     @CrossOrigin(origins = "http://localhost:5173")
@@ -45,12 +47,17 @@ public class UserController {
     public void addDoctor(@RequestBody DoctorDTO doctorDTO){
         userService.addDoctor(doctorDTO);
     }
-
+    //lấy user là doctor theo id
+    @GetMapping("/user/doctor/{doctorId}")
+    public void getDoctorById(@PathVariable int id) {userService.findDoctorById(id) ;}
     // Xóa một doctor (ADMIN)
     @DeleteMapping("doctor/delete/{doctorId}")
     public void deleteDoctor(@PathVariable int doctorId){
         userService.deleteDoctor(doctorId);
     }
+    //chỉnh sửa thông tin bác sĩ
+    @GetMapping("/user/update/{doctorId}")
+    public void updateDoctor(@PathVariable int doctorId, @RequestBody DoctorDTO doctorDTO){userService.updateDoctor(doctorId,doctorDTO);}
 
     // Lấy ra các user là patient
     @GetMapping("/user/patient")
@@ -68,6 +75,8 @@ public class UserController {
     public Users getUserById(@PathVariable int id) {
         return UserService.findUserById(id);
     }
+
+
 
 
 }

@@ -4,6 +4,7 @@ import com.penguinsan.BookingCare.DTO.DoctorDTO;
 import com.penguinsan.BookingCare.DTO.PatientDTO;
 import com.penguinsan.BookingCare.DTO.UserDTO;
 import com.penguinsan.BookingCare.Mapper.UserMapper;
+import com.penguinsan.BookingCare.Model.Clinics;
 import com.penguinsan.BookingCare.Model.Roles;
 import com.penguinsan.BookingCare.Model.Specializations;
 import com.penguinsan.BookingCare.Model.Users;
@@ -11,13 +12,15 @@ import com.penguinsan.BookingCare.Repository.ClinicsRepository;
 import com.penguinsan.BookingCare.Repository.RolesRepository;
 import com.penguinsan.BookingCare.Repository.SpecializationsRepository;
 import com.penguinsan.BookingCare.Repository.UsersRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+import java.time.Year;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,11 +36,9 @@ public class UserService {
     RolesRepository roleRepo;
     @Autowired
     SpecializationsRepository specializationRepo;
-    @Autowired
-    ClinicsRepository clinicRepo;
 
     @Autowired
-    UsersRepository usersRepo;
+    static UsersRepository usersRepo;
 
     @Autowired
     private UserMapper userMapper;
@@ -92,7 +93,7 @@ public class UserService {
     }
 
     // Tìm kiếm người dùng theo id
-    public Users findUserById(int id){
+    public static Users findUserById(int id){
         return usersRepo.findById(id).orElse(new Users());
     }
 
@@ -133,8 +134,35 @@ public class UserService {
             throw new UsernameNotFoundException("Doctor with ID " + doctorId + " not found");
         }
     }
+    // lấy doctor by id
+    public Optional<Users> findDoctorById(int id){
 
+        return usersRepo.getDoctorById(id);
+    }
     // Chỉnh sửa thông tin người dùng (bác sĩ/bệnh nhân)
 
+
+    @Transactional
+    public Optional<Specializations> getSpecializationByName(String name) {
+        return specializationRepo.getSpecializationsByName(name);
+    }
+
+
+
+    public boolean updateDoctor(int userId,DoctorDTO doctorDTO) {
+        // Tìm kiếm specialization
+        Optional<Specializations> specializationOpt = getSpecializationByName(doctorDTO.getSpecialization_Id().getName());
+        // Kiểm tra nếu tìm thấy specialization
+        if (!specializationOpt.isPresent()) {
+            return false; // Không tìm thấy
+        }
+
+        // Cập nhật thông tin bác sĩ
+        int rowsUpdated = usersRepo.updateDoctor(userId, doctorDTO.getFullName(), doctorDTO.getPassword(), doctorDTO.getEmail(), doctorDTO.getPhone(),
+                doctorDTO.getDegree(),doctorDTO.getBooking_Fee() , doctorDTO.getImage(), doctorDTO.isGender(), doctorDTO.getAddress(), doctorDTO.getDateOfBirth(), doctorDTO.getExperience(),
+                specializationOpt.get());
+
+        return rowsUpdated > 0; // Trả về true nếu có ít nhất 1 dòng được cập nhật
+    }
 
 }

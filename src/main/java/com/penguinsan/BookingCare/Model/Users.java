@@ -21,17 +21,17 @@ public class Users {
     private int user_Id;
     private String full_name;
     private String email;
-    private String Password;
-    private String Phone;
-    private String Degree;
-    private float Booking_Fee;
-    private String Address;
-    private String Image;
-    private boolean Available;
-    private boolean Gender;
+    private String password;
+    private String phone;
+    private String degree;
+    private float bookingFee;
+    private String address;
+    private String image;
+    private boolean available;
+    private boolean gender;
 
     private Date DateOfBirth;
-    private Year Experience;
+    private Year experience;
 
     @ManyToOne
     @JoinColumn(name = "Role_Id")

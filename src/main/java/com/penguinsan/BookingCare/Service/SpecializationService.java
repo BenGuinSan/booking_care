@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SpecializationService {
@@ -21,6 +22,7 @@ public class SpecializationService {
     }
 
     // Lấy một chuyên khóa
+    public Optional<Specializations> getSpecializationsByName(String name) {return SepecialiazationRepo.getSpecializationsByName(name);}
 
     // Thêm một chuyên khoa
 

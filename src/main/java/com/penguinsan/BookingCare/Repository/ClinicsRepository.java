@@ -9,4 +9,6 @@ public interface ClinicsRepository extends JpaRepository<Clinics, Integer> {
     // Toàn bộ lấy ra toàn bộ danh sách phòng khám
 
     // Một phóng khám cụ thể (theo id)
+
+    //tìm theo tên
 }
