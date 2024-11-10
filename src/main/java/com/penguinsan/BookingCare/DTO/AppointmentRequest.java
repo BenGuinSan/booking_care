@@ -1,25 +1,38 @@
 package com.penguinsan.BookingCare.DTO;
 
+
+
+import com.penguinsan.BookingCare.Model.Schedules;
+
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Date;
 
 public class AppointmentRequest {
+
     private Doctor doctor;
     private Patient patient;
     private Time startTime; // Trường startTime với kiểu Time
     private Date appointmentDate; // Trường appointmentDate với kiểu Date
+    private Schedules schedule;
+
+
+
 
     // Constructor mặc định
     public AppointmentRequest() {}
 
     // Constructor với tham số
-    public AppointmentRequest(Doctor doctor, Patient patient, Time startTime, Date appointmentDate) {
+    public AppointmentRequest(Doctor doctor, Patient patient, Time startTime, Date appointmentDate, Schedules schedule){
         this.doctor = doctor;
         this.patient = patient;
         this.startTime = startTime;
         this.appointmentDate = appointmentDate;
+        this.schedule = schedule;
+
     }
+
+
 
     // Getter và Setter cho doctor
     public Doctor getDoctor() {
@@ -55,6 +68,14 @@ public class AppointmentRequest {
 
     public void setAppointmentDate(Date appointmentDate) {
         this.appointmentDate = appointmentDate;
+    }
+
+    // Getter và Setter cho schedule
+    public Schedules getSchedule() {
+        return schedule;
+    }
+    public void setSchedule(Schedules schedule) {
+        this.schedule = schedule;
     }
 
     // Lớp con Doctor
@@ -98,4 +119,26 @@ public class AppointmentRequest {
             this.userId = userId;
         }
     }
+
+    public static class Schedule {
+        private int scheduleId;
+
+        // Getter và Setter cho scheduleId
+        public int getScheduleId() {
+            return scheduleId;
+        }
+
+        public void setScheduleId(int scheduleId) {
+            this.scheduleId = scheduleId;
+        }
+
+        // Constructor cho Schedule
+        public Schedule() {}
+
+        public Schedule(int scheduleId) {
+            this.scheduleId = scheduleId;
+        }
+    }
+
+
 }

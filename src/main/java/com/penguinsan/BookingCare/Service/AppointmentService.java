@@ -19,6 +19,10 @@ public class AppointmentService {
     {
         return appointmentRepository.findByPatientId(patientId);
     }
+    // lay lich hen theo id lich hen
+    public Appointment getAppointmentById(int appointmentId) {
+        return appointmentRepository.findById(appointmentId).orElse(null);
+    }
 
     //them lich hen
     public void addAppointment(Appointment appointment)

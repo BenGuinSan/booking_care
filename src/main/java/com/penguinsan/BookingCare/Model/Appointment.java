@@ -30,6 +30,11 @@ public class Appointment {
     @JoinColumn(name = "status_id")
     private Statues status;
 
+    @ManyToOne
+    @JoinColumn(name = "schedule_id")
+    private Schedules schedule;
+
+
     private Date appointment_Date;
 
     private Time start_time;
