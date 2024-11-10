@@ -28,6 +28,14 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
     List<Users> findAllPatient();
 
 
+    //lấy thông tin của bác sĩ trên 5 năm kinh nghiệm
+    @Query(
+            value = "SELECT * FROM USERS u WHERE u.Experience > 5",
+            nativeQuery = true)
+    List<Users> findDoctorExperience();
+
+
+
 
 
 }

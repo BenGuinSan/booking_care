@@ -1,9 +1,6 @@
 package com.penguinsan.BookingCare.Security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +49,23 @@ public class JWTGenerator {
                 .getBody();
         return claims.getSubject();
     }
+
+    // Lấy ID người dùng từ token
+    public int getIdFromJWT(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.containsKey("userId") ? claims.get("userId", Integer.class) : -1; // Adjust according to your claim structure
+        } catch (JwtException e) {
+            throw new IllegalArgumentException("Invalid token", e);
+        }
+    }
+
+
+
 
     public Boolean validateToken(String token)
     {

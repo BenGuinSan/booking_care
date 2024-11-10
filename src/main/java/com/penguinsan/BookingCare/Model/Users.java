@@ -19,13 +19,13 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_Id;
-    private String full_name;
+    private String fullName;
     private String email;
     private String Password;
     private String Phone;
     private String Degree;
     private float Booking_Fee;
-    private String Address;
+    private String address;
     private String Image;
     private boolean Available;
     private boolean Gender;
@@ -43,5 +43,5 @@ public class Users {
 
     @ManyToOne
     @JoinColumn(name = "Clinic_Id")
-    public Clinics clinic;
+    public Clinics clinic_Id;
 }

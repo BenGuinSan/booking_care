@@ -50,6 +50,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/user/**").permitAll()
                         .requestMatchers("/check-role").permitAll()
+                        .requestMatchers("/schedules/**").permitAll()
+                        .requestMatchers("/appointment/**").permitAll()
+                        .requestMatchers("payment/**").permitAll()
+                        .requestMatchers("/specialization").permitAll()
                         .requestMatchers("/user/doctor/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );

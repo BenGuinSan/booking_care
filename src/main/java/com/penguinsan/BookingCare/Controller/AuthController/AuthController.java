@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -76,7 +77,7 @@ public class AuthController {
 
         // Tạo đối tượng  người dùng mới
         Users user = new Users();
-        user.setFull_name(registerDTO.getFull_name());
+        user.setFullName(registerDTO.getFull_name());
         user.setEmail(registerDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setAvailable(true);
@@ -100,6 +101,24 @@ public class AuthController {
     public Object userDetail(Authentication authentication){
         String email = authentication.getName();
         return userService.getUserDetails(email);
+    }
+
+    // Lấy thông tin người dùng đã đăng nhập
+    @GetMapping("/profile")
+    public int getUserProfile() {
+        // Lấy thông tin xác thực từ SecurityContextHolder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Lấy username từ token
+            String username = authentication.getName();
+            int userId = userService.getUserIdByEmail(username);
+
+
+            return userId;
+        } else {
+            return 0;
+        }
     }
 
 

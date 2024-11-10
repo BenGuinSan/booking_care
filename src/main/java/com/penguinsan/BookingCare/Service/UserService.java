@@ -11,6 +11,7 @@ import com.penguinsan.BookingCare.Repository.ClinicsRepository;
 import com.penguinsan.BookingCare.Repository.RolesRepository;
 import com.penguinsan.BookingCare.Repository.SpecializationsRepository;
 import com.penguinsan.BookingCare.Repository.UsersRepository;
+import com.penguinsan.BookingCare.Security.JWTGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,8 +44,7 @@ public class UserService {
     private UserMapper userMapper;
 
     // Lấy toàn bộ User(DTO)
-    public List<UserDTO> getAllUser()
-    {
+    public List<UserDTO> getAllUser() {
         var users = usersRepo.findAll();
 
         List<UserDTO> userDTOs = users.stream()
@@ -66,8 +66,7 @@ public class UserService {
     }
 
     // Lấy toàn bộ Doctor: User có Role_Id = 2
-    public List<DoctorDTO> getAllDoctor()
-    {
+    public List<DoctorDTO> getAllDoctor() {
         var doctor = usersRepo.findAllDoctor();
         List<DoctorDTO> doctorDTOs = doctor.stream()
                 .map(userMapper::toDoctorDTO)
@@ -76,8 +75,7 @@ public class UserService {
     }
 
     // Lấy toàn bộ Patient: User có Role_Id = 3
-    public List<PatientDTO> getAllPatient()
-    {
+    public List<PatientDTO> getAllPatient() {
         var patient = usersRepo.findAllPatient();
         List<PatientDTO> patientDTOs = patient.stream()
                 .map(userMapper::toPatientDTO)
@@ -86,19 +84,19 @@ public class UserService {
     }
 
     // Tìm kiếm người dùng theo email
-    public Optional<Users> findByEmail(String email)
-    {
+    public Optional<Users> findByEmail(String email) {
         return usersRepo.findByEmail(email);
     }
 
     // Tìm kiếm người dùng theo id
-    public Users findUserById(int id){
-        return usersRepo.findById(id).orElse(new Users());
+    public Users findUserById(Integer id) {
+        Users user = usersRepo.findById(id).orElse(null);
+        return user;
     }
 
+
     // Kiểm tra người dùng đã tồn tại hay chưa
-    public Boolean existsByEmail(String email)
-    {
+    public Boolean existsByEmail(String email) {
         return usersRepo.existsByEmail(email);
     }
 
@@ -108,7 +106,7 @@ public class UserService {
         Roles role = roleRepo.findById(doctor).orElse(null);
 
         Users user = new Users();
-        user.setFull_name(doctorDTO.getFullName());
+        user.setFullName(doctorDTO.getFullName());
         user.setEmail(doctorDTO.getEmail());
         user.setPassword(passwordEncoder.encode(doctorDTO.getPassword()));
         user.setDegree(doctorDTO.getDegree());
@@ -118,13 +116,13 @@ public class UserService {
         user.setRole(role);
 
         user.setSpecialization(doctorDTO.getSpecialization_Id());
-        user.setClinic(doctorDTO.getClinic_Id());
+        user.setClinic_Id(doctorDTO.getClinic_Id());
 
         usersRepo.save(user);
     }
 
     // Xóa một người dùng (bác sĩ/bệnh nhân)
-    public void deleteDoctor(int doctorId){
+    public void deleteDoctor(int doctorId) {
         Optional<Users> optionalDoctorToDelete = usersRepo.findById(doctorId);
         if (optionalDoctorToDelete.isPresent()) {
             Users doctorToDelete = optionalDoctorToDelete.get();
@@ -134,7 +132,26 @@ public class UserService {
         }
     }
 
-    // Chỉnh sửa thông tin người dùng (bác sĩ/bệnh nhân)
+    // Lấy toàn bộ bác sĩ
+    public List<Users> findAllDoctor() {
+        return usersRepo.findAllDoctor();
+    }
+
+    // Lấy danh sach bác sĩ có kinh nghiệm trên 5 năm
+    public List<Users> findDoctorExperience() {
+        return usersRepo.findDoctorExperience();
+    }
+
+    // Lay thong tin user.id theo email
+    public int getUserIdByEmail(String email) {
+        Optional<Users> user = usersRepo.findByEmail(email);
+        return user.map(Users::getUser_Id).orElse(0);
+    }
+
+
+
+
+
 
 
 }

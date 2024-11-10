@@ -4,7 +4,12 @@ import com.penguinsan.BookingCare.Model.Specializations;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface SpecializationsRepository extends JpaRepository<Specializations, Integer> {
-    // Truy vấn lấy toàn bộ danh sách chuyên khoa
+
+    // Truy vấn lấy ra toàn bộ danh sách Specializations
+    List<Specializations> findAll();
 }

@@ -3,6 +3,7 @@ package com.penguinsan.BookingCare.Controller;
 import com.penguinsan.BookingCare.DTO.DoctorDTO;
 import com.penguinsan.BookingCare.DTO.PatientDTO;
 import com.penguinsan.BookingCare.DTO.UserDTO;
+import com.penguinsan.BookingCare.Model.Specializations;
 import com.penguinsan.BookingCare.Model.Users;
 import com.penguinsan.BookingCare.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ public class UserController {
     // Lấy toàn bộ danh sách User
     @GetMapping("/user")
     @CrossOrigin(origins = "http://localhost:5173")
-
     public List<UserDTO> getAllUser()
     {
         return userService.getAllUser();
@@ -32,7 +32,7 @@ public class UserController {
 
     // Lấy ra các user là doctor
 
-    @GetMapping("/user/doctor")
+    @GetMapping("/doctor")
     @CrossOrigin(origins = "http://localhost:5173")
     public List<DoctorDTO> getAllDoctor()
 
@@ -64,10 +64,28 @@ public class UserController {
 
     // Lấy user theo id
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("user/{id}")
+    @GetMapping("/{id}")
     public Users getUserById(@PathVariable int id) {
-        return UserService.findUserById(id);
+        return userService.findUserById(id);
     }
+
+    // get all bác sĩ
+    @GetMapping("/doctorAll")
+    public List<Users> findAllDoctor() {
+        return userService.findAllDoctor();
+    }
+
+
+    //lay bac si trên 5 năm kinh nghiệm
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/doctor/experience")
+    public List<Users> findDoctorExperience() {
+        return userService.findDoctorExperience();
+    }
+
+
+
+
 
 
 }
