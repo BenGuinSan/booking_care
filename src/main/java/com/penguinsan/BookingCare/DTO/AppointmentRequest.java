@@ -4,6 +4,7 @@ package com.penguinsan.BookingCare.DTO;
 
 import com.penguinsan.BookingCare.Model.Schedules;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Date;
@@ -16,6 +17,8 @@ public class AppointmentRequest {
     private Date appointmentDate; // Trường appointmentDate với kiểu Date
     private Schedules schedule;
 
+    private long amout;
+
 
 
 
@@ -23,12 +26,14 @@ public class AppointmentRequest {
     public AppointmentRequest() {}
 
     // Constructor với tham số
-    public AppointmentRequest(Doctor doctor, Patient patient, Time startTime, Date appointmentDate, Schedules schedule){
+    public AppointmentRequest(Doctor doctor, Patient patient, Time startTime, Date appointmentDate, Schedules schedule, long amout){
         this.doctor = doctor;
         this.patient = patient;
         this.startTime = startTime;
         this.appointmentDate = appointmentDate;
         this.schedule = schedule;
+        this.amout = amout;
+
 
     }
 
@@ -138,6 +143,14 @@ public class AppointmentRequest {
         public Schedule(int scheduleId) {
             this.scheduleId = scheduleId;
         }
+    }
+
+    public long getAmout() {
+        return amout;
+    }
+
+    public void setAmout(long amout) {
+        this.amout = amout;
     }
 
 

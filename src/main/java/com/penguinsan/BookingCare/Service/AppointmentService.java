@@ -5,6 +5,9 @@ import com.penguinsan.BookingCare.Model.Appointment;
 import com.penguinsan.BookingCare.Model.Users;
 import com.penguinsan.BookingCare.Repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,14 +28,20 @@ public class AppointmentService {
     }
 
     //them lich hen
-    public void addAppointment(Appointment appointment)
+    public Appointment addAppointment(Appointment appointment)
     {
-        appointmentRepository.save(appointment);
+        appointment = appointmentRepository.save(appointment);
+        return appointment;
     }
 
     //lay tat ca lich kham
     public List<Appointment> getAllAppointment()
     {
         return appointmentRepository.findAll();
+    }
+
+    public Page<Appointment> getAppointments(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return appointmentRepository.findAll(pageable);
     }
 }

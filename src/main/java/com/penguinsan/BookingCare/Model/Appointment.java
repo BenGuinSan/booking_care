@@ -34,6 +34,9 @@ public class Appointment {
     @JoinColumn(name = "schedule_id")
     private Schedules schedule;
 
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private Payments payment;
 
     private Date appointment_Date;
 

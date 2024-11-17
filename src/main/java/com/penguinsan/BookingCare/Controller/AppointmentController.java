@@ -2,14 +2,13 @@ package com.penguinsan.BookingCare.Controller;
 
 import com.penguinsan.BookingCare.DTO.AppointmentRequest;
 import com.penguinsan.BookingCare.DTO.UserRequest;
-import com.penguinsan.BookingCare.Model.Appointment;
-import com.penguinsan.BookingCare.Model.Schedules;
-import com.penguinsan.BookingCare.Model.Statues;
-import com.penguinsan.BookingCare.Model.Users;
+import com.penguinsan.BookingCare.Model.*;
 import com.penguinsan.BookingCare.Service.AppointmentService;
+import com.penguinsan.BookingCare.Service.PaymentService;
 import com.penguinsan.BookingCare.Service.SchedulesService;
 import com.penguinsan.BookingCare.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +25,23 @@ import java.util.Map;
 public class AppointmentController {
     @Autowired
     AppointmentService appointmentService;
-    @Autowired
+    PaymentService paymentService;
     UserService userService;
-    @Autowired
     SchedulesService schedulesService;
-    // lay lich hen theo id benh nhan
+    @Autowired
+    public AppointmentController(AppointmentService appointmentService, PaymentService paymentService, UserService userService, SchedulesService schedulesService) {
+        this.appointmentService = appointmentService;
+        this.paymentService = paymentService;
+        this.userService = userService;
+        this.schedulesService = schedulesService;
+    }
 
+    // lay lich hen theo id benh nhan
+    @GetMapping("/appointments")
+    public Page<Appointment> getAppointments(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "10") int size) {
+        return appointmentService.getAppointments(page, size);
+    }
     @PostMapping("/")
     public ResponseEntity<List<Appointment>> getAppointments(@RequestBody UserRequest request) {
         Integer userId = request.getUserId();
@@ -80,6 +90,12 @@ public class AppointmentController {
         if (appointmentDate == null || startTime == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Appointment date or start time cannot be null");
         }
+        Payments payments = new Payments();
+
+        payments.setAmount(request.getAmout());
+        payments.setPayment_Date(null);
+        payments.setPayment_method(Payments.Payment_method.CASH);
+        paymentService.addPayment(payments);
 
         // Tạo đối tượng Appointment và thiết lập các thuộc tính
         Appointment appointment = new Appointment();
@@ -88,13 +104,21 @@ public class AppointmentController {
         appointment.setAppointment_Date(appointmentDate);
         appointment.setStart_time(startTime);
         appointment.setSchedule(schedules);
+        appointment.setPayment(payments);
         // Tạo trạng thái cuộc hẹn (có thể thay đổi theo trạng thái thực tế)
         Statues status = new Statues();
         status.setStatus_Id(1); // Đảm bảo trạng thái với id này tồn tại trong DB
         appointment.setStatus(status);
 
         // Lưu cuộc hẹn vào cơ sở dữ liệu
-        appointmentService.addAppointment(appointment);
+        appointment = appointmentService.addAppointment(appointment);
+
+
+
+
+
+
+
 
         return ResponseEntity.ok("Add appointment success");
     }
@@ -110,7 +134,7 @@ public class AppointmentController {
         }
 //        Schedules schedules = schedulesService.
         Schedules schedules = schedulesService.findScheduleById(appointment.getSchedule().getSchedule_Id());
-        schedules.set_booked(true);
+        schedules.set_booked(false);
         Statues status = new Statues();
         status.setStatus_Id(4);
         appointment.setStatus(status);
