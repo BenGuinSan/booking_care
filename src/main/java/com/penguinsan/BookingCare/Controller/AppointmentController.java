@@ -36,17 +36,20 @@ public class AppointmentController {
         this.schedulesService = schedulesService;
     }
 
-    // lay lich hen theo id benh nhan
-    @GetMapping("/appointments")
-    public Page<Appointment> getAppointments(@RequestParam(defaultValue = "0") int page,
-                                             @RequestParam(defaultValue = "10") int size) {
-        return appointmentService.getAppointments(page, size);
-    }
+
+
     @PostMapping("/")
-    public ResponseEntity<List<Appointment>> getAppointments(@RequestBody UserRequest request) {
+    public ResponseEntity<List<Appointment>> getAppointments(@RequestBody UserRequest request , @RequestParam int page, @RequestParam int size) {
         Integer userId = request.getUserId();
-        List<Appointment> appointments = appointmentService.getAppointmentByPatientId(userId);
+        List<Appointment> appointments = appointmentService.getAppointmentByPatientId(userId , page, size);
         return ResponseEntity.ok(appointments);
+    }
+
+    //dem so lich hen theo id benh nhan
+    @PostMapping("/count")
+    public ResponseEntity<Integer> countAppointments(@RequestBody UserRequest request) {
+        int count = appointmentService.countByPatientId(request.getUserId());
+        return ResponseEntity.ok(count);
     }
 
     //lay tat ca lich kham
@@ -141,6 +144,19 @@ public class AppointmentController {
         appointment.setSchedule(schedules);
         appointmentService.addAppointment(appointment);
         return "Cancel appointment success";
+    }
+
+    // kiem tra benh nhan co dat trung lich khong
+    @GetMapping("/checkexistsappointment")
+    public ResponseEntity<Integer> checkExistsAppointment(@RequestParam int patientId, @RequestParam String appointmentDate, @RequestParam String startTime) {
+        Long longDate = Long.parseLong(appointmentDate);
+        Date date = new Date(longDate);
+        Time time = Time.valueOf(startTime);
+        System.out.println("date: " + date);
+        System.out.println("time: " + time);
+        System.out.println("patientId: " + patientId);
+        int exists = appointmentService.existsByPatientIdAndAppointmentDateAndStartTime(patientId, date, time);
+        return ResponseEntity.ok(exists);
     }
 
 

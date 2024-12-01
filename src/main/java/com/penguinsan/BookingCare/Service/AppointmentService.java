@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,9 +20,10 @@ public class AppointmentService {
     AppointmentRepository appointmentRepository;
 
     // lay lich hen theo id benh nhan
-    public List<Appointment> getAppointmentByPatientId(int patientId)
+    public List<Appointment> getAppointmentByPatientId(int patientId , int skip, int size)
     {
-        return appointmentRepository.findByPatientId(patientId);
+        Pageable pageable = PageRequest.of(skip/size, size);
+        return appointmentRepository.findByPatientId(patientId, pageable).getContent();
     }
     // lay lich hen theo id lich hen
     public Appointment getAppointmentById(int appointmentId) {
@@ -43,5 +46,17 @@ public class AppointmentService {
     public Page<Appointment> getAppointments(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return appointmentRepository.findAll(pageable);
+    }
+
+    // dem so lich hen theo id benh nhan
+    public int countByPatientId(int patientId)
+    {
+        return appointmentRepository.countByPatientId(patientId);
+    }
+
+    // kiem tra benh nhan co dat trung lich khong
+    public int existsByPatientIdAndAppointmentDateAndStartTime(int patientId, Date appointmentDate, Time startTime)
+    {
+        return appointmentRepository.existsByPatientIdAndAppointmentDateAndStartTime(patientId, appointmentDate, startTime);
     }
 }
