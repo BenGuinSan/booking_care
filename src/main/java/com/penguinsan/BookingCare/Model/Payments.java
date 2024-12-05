@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Payments {
 
-    private enum Payment_method{
+    public enum Payment_method{
         ONLINE,
         CASH
     }
@@ -22,13 +22,10 @@ public class Payments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int payment_Id;
 
-    @OneToOne
-    @JoinColumn(name = "appointment_id")
-    private Appointment appointment;
-
-    private float amount;
+    private long amount;
 
     private Date payment_Date;
 
+    @Enumerated(EnumType.STRING)
     private Payment_method payment_method;
 }

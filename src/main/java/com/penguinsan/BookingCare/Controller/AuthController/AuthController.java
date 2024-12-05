@@ -6,11 +6,15 @@ import com.penguinsan.BookingCare.DTO.AuthDTO.RegisterDTO;
 import com.penguinsan.BookingCare.Model.Roles;
 import com.penguinsan.BookingCare.Model.Users;
 import com.penguinsan.BookingCare.Repository.UsersRepository;
+import com.penguinsan.BookingCare.Security.CustomUserDetailsService;
 import com.penguinsan.BookingCare.Security.JWTGenerator;
 import com.penguinsan.BookingCare.Service.RoleService;
 import com.penguinsan.BookingCare.Service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +51,7 @@ public class AuthController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -58,13 +64,19 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getEmail(),
                         loginDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        
         String token = jwtGenerator.generateToken(authentication);
+        Cookie cookie = new Cookie("accessToken", token);
+        cookie.setMaxAge(7 * 24 * 60 * 60000);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        response.addCookie(cookie);
         return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
     }
 
@@ -74,36 +86,37 @@ public class AuthController {
         {
             return new ResponseEntity<>("Email is taken!", HttpStatus.BAD_REQUEST);
         }
-
         // Tạo đối tượng  người dùng mới
         Users user = new Users();
-        user.setFullName(registerDTO.getFull_name());
+        user.setFullName(registerDTO.getFullName());
         user.setEmail(registerDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setAvailable(true);
-
         // Set role (patient) cho đối tượng người dùng vừa tạo
         Roles role = roleService.findRoleById(patient);
         user.setRole(role);
-
         userRepo.save(user);
-
         return new ResponseEntity<>("User registered success", HttpStatus.OK);
     }
 
     @PostMapping("logout")
-    public ResponseEntity<String> logout(){
-        SecurityContextHolder.getContext().setAuthentication(null);
-        return new ResponseEntity<>("Successfully logged out", HttpStatus.OK);
+    public ResponseEntity<String> logout(HttpServletRequest request){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request,
+            null, auth);
+
+        }
+        return ResponseEntity.ok("Logout successful!");
     }
 
-    @GetMapping("detail")
-    public Object userDetail(Authentication authentication){
-        String email = authentication.getName();
+    // Lay thong tin chi tiet user qua email
+    @GetMapping("/{email}")
+    public Object userDetail(Authentication authentication, @PathVariable String email){
         return userService.getUserDetails(email);
     }
 
-    // Lấy thông tin người dùng đã đăng nhập
+    // Lấy thông tin người dùng đã đăng nhập (ID)
     @GetMapping("/profile")
     public int getUserProfile() {
         // Lấy thông tin xác thực từ SecurityContextHolder
@@ -113,13 +126,29 @@ public class AuthController {
             // Lấy username từ token
             String username = authentication.getName();
             int userId = userService.getUserIdByEmail(username);
-
-
             return userId;
         } else {
             return 0;
         }
     }
 
-
+//    @PostMapping("/verify")
+//    public ResponseEntity<?> verifyUser(@RequestBody VerifyUserDto verifyUserDto) {
+//        try {
+//            authenticationService.verifyUser(verifyUserDto);
+//            return ResponseEntity.ok("Account verified successfully");
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+//
+//    @PostMapping("/resend")
+//    public ResponseEntity<?> resendVerificationCode(@RequestParam String email) {
+//        try {
+//            authenticationService.resendVerificationCode(email);
+//            return ResponseEntity.ok("Verification code sent");
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 }

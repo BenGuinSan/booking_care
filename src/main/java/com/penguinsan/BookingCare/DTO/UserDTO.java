@@ -15,9 +15,8 @@ import java.util.Date;
 @Data
 public class UserDTO {
     private int User_Id;
-    private String full_name;
+    private String fullName;
     private String Email;
-    private String Password;
     private String Phone;
     private float Booking_Fee;
     private String Address;
@@ -25,5 +24,8 @@ public class UserDTO {
     private boolean Available;
     private boolean Gender;
     private Date DateOfBirth;
-    private Year Experience;
+    private Integer Experience;
+    private Specializations Specialization;
+    private String Description;
+    private String Degree;
 }

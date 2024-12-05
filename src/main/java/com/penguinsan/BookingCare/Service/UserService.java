@@ -1,22 +1,23 @@
 package com.penguinsan.BookingCare.Service;
 
 import com.penguinsan.BookingCare.DTO.DoctorDTO;
+import com.penguinsan.BookingCare.DTO.DoctorRequestDTO;
 import com.penguinsan.BookingCare.DTO.PatientDTO;
 import com.penguinsan.BookingCare.DTO.UserDTO;
 import com.penguinsan.BookingCare.Mapper.UserMapper;
+import com.penguinsan.BookingCare.Model.Clinics;
 import com.penguinsan.BookingCare.Model.Roles;
 import com.penguinsan.BookingCare.Model.Specializations;
 import com.penguinsan.BookingCare.Model.Users;
-import com.penguinsan.BookingCare.Repository.ClinicsRepository;
-import com.penguinsan.BookingCare.Repository.RolesRepository;
-import com.penguinsan.BookingCare.Repository.SpecializationsRepository;
-import com.penguinsan.BookingCare.Repository.UsersRepository;
+import com.penguinsan.BookingCare.Repository.*;
 import com.penguinsan.BookingCare.Security.JWTGenerator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -28,6 +29,7 @@ public class UserService {
     @Value("${doctor.id}")
     private int doctor;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -39,6 +41,9 @@ public class UserService {
 
     @Autowired
     UsersRepository usersRepo;
+
+    @Autowired
+    CustomUserRepository cusUsersRepo;
 
     @Autowired
     private UserMapper userMapper;
@@ -55,11 +60,11 @@ public class UserService {
     }
 
     // Lấy thông tin của người dùng đang đăng nhập
-    public PatientDTO getUserDetails(String email) {
+    public UserDTO getUserDetails(String email) {
         Optional<Users> userDetail = usersRepo.findByEmail(email);
         if (userDetail.isPresent()) {
             Users user = userDetail.get();
-            return userMapper.toPatientDTO(user);
+            return userMapper.toUserDTO(user);
         } else {
             throw new UsernameNotFoundException("User not found");
         }
@@ -67,7 +72,7 @@ public class UserService {
 
     // Lấy toàn bộ Doctor: User có Role_Id = 2
     public List<DoctorDTO> getAllDoctor() {
-        var doctor = usersRepo.findAllDoctor();
+        var doctor = cusUsersRepo.findAllDoctor();
         List<DoctorDTO> doctorDTOs = doctor.stream()
                 .map(userMapper::toDoctorDTO)
                 .collect(Collectors.toList());
@@ -76,7 +81,7 @@ public class UserService {
 
     // Lấy toàn bộ Patient: User có Role_Id = 3
     public List<PatientDTO> getAllPatient() {
-        var patient = usersRepo.findAllPatient();
+        var patient = cusUsersRepo.findAllPatient();
         List<PatientDTO> patientDTOs = patient.stream()
                 .map(userMapper::toPatientDTO)
                 .collect(Collectors.toList());
@@ -94,29 +99,39 @@ public class UserService {
         return user;
     }
 
-
     // Kiểm tra người dùng đã tồn tại hay chưa
     public Boolean existsByEmail(String email) {
         return usersRepo.existsByEmail(email);
     }
 
     // Tạo mới một bác sĩ (ADMIN)
-    public void addDoctor(DoctorDTO doctorDTO) {
+    public void addDoctor(DoctorRequestDTO doctorRequestDTO, String imageUrl) {
         // Role: Doctor
         Roles role = roleRepo.findById(doctor).orElse(null);
 
-        Users user = new Users();
-        user.setFullName(doctorDTO.getFullName());
-        user.setEmail(doctorDTO.getEmail());
-        user.setPassword(passwordEncoder.encode(doctorDTO.getPassword()));
-        user.setDegree(doctorDTO.getDegree());
-        user.setDateOfBirth(doctorDTO.getDateOfBirth());
-        user.setAvailable(true);
-        user.setPhone(doctorDTO.getPhone());
-        user.setRole(role);
+        // Specialization
+        Specializations specialization  = specializationRepo.getSpecializationsByName(doctorRequestDTO.getSpecialization()).orElse(null);
 
-        user.setSpecialization(doctorDTO.getSpecialization_Id());
-        user.setClinic_Id(doctorDTO.getClinic_Id());
+        // Clinic
+//        Clinics clinic = clinicRepo.getClinicsByName(doctorRequestDTO.getClinic()).orElse(null);
+
+        Users user = new Users();
+        user.setFullName(doctorRequestDTO.getFullName());
+        user.setEmail(doctorRequestDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(doctorRequestDTO.getPassword()));
+//        user.setPhone(doctorRequestDTO.getPhone());
+        user.setDegree(doctorRequestDTO.getDegree());
+        user.setBooking_Fee(doctorRequestDTO.getBooking_Fee());
+        user.setAddress(doctorRequestDTO.getAddress());
+        user.setExperience(doctorRequestDTO.getExperience());
+        user.setSpecialization(specialization);
+//        user.setDateOfBirth(doctorRequestDTO.getDateOfBirth());
+//        user.setClinic_Id(clinic);
+        user.setDescription(doctorRequestDTO.getDescription());
+        user.setImage(imageUrl);
+        user.setRole(role);
+        user.setGender(true);
+        user.setAvailable(true);
 
         usersRepo.save(user);
     }
@@ -134,12 +149,12 @@ public class UserService {
 
     // Lấy toàn bộ bác sĩ
     public List<Users> findAllDoctor() {
-        return usersRepo.findAllDoctor();
+        return cusUsersRepo.findAllDoctor();
     }
 
     // Lấy danh sach bác sĩ có kinh nghiệm trên 5 năm
     public List<Users> findDoctorExperience() {
-        return usersRepo.findDoctorExperience();
+        return cusUsersRepo.findDoctorExperience();
     }
 
     // Lay thong tin user.id theo email
@@ -148,10 +163,25 @@ public class UserService {
         return user.map(Users::getUser_Id).orElse(0);
     }
 
+//    @Transactional
+//    public Optional<Specializations> getSpecializationByName(String name) {
+//        return specializationRepo.getSpecializationsByName(name);
+//    }
 
+    public boolean updateDoctor(int userId, DoctorRequestDTO doctorRequestDTO) {
+        // Tìm kiếm specialization
+        Specializations specialization  = specializationRepo.getSpecializationsByName(doctorRequestDTO.getSpecialization()).orElse(null);
+        // Kiểm tra nếu tìm thấy specialization
+        if (specialization == null) {
+            return false; // Specialization not found
+        }
 
+        // Cập nhật thông tin bác sĩ
+        int rowsUpdated = usersRepo.updateDoctor(userId, doctorRequestDTO.getFullName(), doctorRequestDTO.getPassword(), doctorRequestDTO.getEmail(), doctorRequestDTO.getPhone(),
+                doctorRequestDTO.getDegree(), doctorRequestDTO.getBooking_Fee() , doctorRequestDTO.getImageUrl(),doctorRequestDTO.isGender(), doctorRequestDTO.getAddress(), doctorRequestDTO.getDateOfBirth(), doctorRequestDTO.getExperience(),
+                specialization);
 
-
-
+        return rowsUpdated > 0; // Trả về true nếu có ít nhất 1 dòng được cập nhật
+    }
 
 }

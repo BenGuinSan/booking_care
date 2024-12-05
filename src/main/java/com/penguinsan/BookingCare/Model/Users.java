@@ -29,9 +29,10 @@ public class Users {
     private String Image;
     private boolean Available;
     private boolean Gender;
-
+    private String Description;
     private Date DateOfBirth;
-    private Year Experience;
+
+    private Integer Experience;
 
     @ManyToOne
     @JoinColumn(name = "Role_Id")
@@ -43,5 +44,5 @@ public class Users {
 
     @ManyToOne
     @JoinColumn(name = "Clinic_Id")
-    public Clinics clinic_Id;
+    public Clinics clinic;
 }

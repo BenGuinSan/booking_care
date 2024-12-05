@@ -22,8 +22,8 @@ public class SchedulesController {
     UserService userService;
 
     // Lấy toàn bộ danh sách lịch khám
-    @GetMapping("/all")
-    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("all")
+//    @CrossOrigin(origins = "http://localhost:5173")
     public List<Schedules> getAllSchedules()
     {
         return schedulesService.getAllSchedules();

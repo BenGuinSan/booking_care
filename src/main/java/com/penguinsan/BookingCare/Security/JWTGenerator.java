@@ -64,9 +64,6 @@ public class JWTGenerator {
         }
     }
 
-
-
-
     public Boolean validateToken(String token)
     {
         try {

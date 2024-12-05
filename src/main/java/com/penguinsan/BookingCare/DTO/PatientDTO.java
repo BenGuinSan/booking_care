@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Data
 public class PatientDTO {
+    private int User_Id;
     private String full_name;
     private String Email;
     private String Phone;
