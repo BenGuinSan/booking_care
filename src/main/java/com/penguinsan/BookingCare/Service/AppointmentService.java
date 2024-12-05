@@ -59,4 +59,25 @@ public class AppointmentService {
     {
         return appointmentRepository.existsByPatientIdAndAppointmentDateAndStartTime(patientId, appointmentDate, startTime);
     }
+
+
+    // Cua ong (Vu)
+    // Lấy danh sách appointment theo doctor
+    public List<Appointment> getAppointmentsByDoctorId(int doctorId) {
+        return appointmentRepository.findByDoctorId(doctorId);
+    }
+
+    // Update status của appointment
+    public boolean updateAppointmentStatus(int appointmentId, int statusId) {
+        int updated = appointmentRepository.updateAppointmentStatus(appointmentId, statusId);
+        return updated > 0;
+
+    }
+
+    // Delete appointment
+    public boolean deleteAppointment(int appointmentId) {
+        int deleted = appointmentRepository.deleteAppointment(appointmentId);
+        return deleted > 0;
+    }
+
 }

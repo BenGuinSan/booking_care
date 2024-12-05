@@ -47,14 +47,13 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagementCustomizer -> sessionManagementCustomizer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/user/**").permitAll()
-                        .requestMatchers("/check-role").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers("/user/doctor/**").permitAll()
                         .requestMatchers("/schedules/**").permitAll()
                         .requestMatchers("/appointment/**").permitAll()
                         .requestMatchers("payment/**").permitAll()
-                        .requestMatchers("/specialization").permitAll()
-                        .requestMatchers("/user/doctor/**").hasRole("ADMIN")
+                        .requestMatchers("/specialization/**").permitAll()
+                        .requestMatchers("/user/**").permitAll()
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

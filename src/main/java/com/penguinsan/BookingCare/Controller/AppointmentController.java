@@ -18,7 +18,6 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/appointment")
@@ -35,7 +34,6 @@ public class AppointmentController {
         this.userService = userService;
         this.schedulesService = schedulesService;
     }
-
 
 
     @PostMapping("/")
@@ -116,13 +114,6 @@ public class AppointmentController {
         // Lưu cuộc hẹn vào cơ sở dữ liệu
         appointment = appointmentService.addAppointment(appointment);
 
-
-
-
-
-
-
-
         return ResponseEntity.ok("Add appointment success");
     }
 
@@ -159,9 +150,17 @@ public class AppointmentController {
         return ResponseEntity.ok(exists);
     }
 
+    // Code của (Vu)
+    // API lấy danh sách appointment theo doctor
+    @GetMapping("/doctor/{doctorId}")
+    public void getAppointmentsByDoctor(@PathVariable int doctorId) {
+        appointmentService.getAppointmentsByDoctorId(doctorId);
+    }
 
-
-
-
+    // API xóa appointment
+    @DeleteMapping("/{appointmentId}")
+    public void deleteAppointment(@PathVariable int appointmentId) {
+        appointmentService.deleteAppointment(appointmentId);
+    }
 
 }
