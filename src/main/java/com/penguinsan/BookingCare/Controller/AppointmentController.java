@@ -150,7 +150,6 @@ public class AppointmentController {
         return ResponseEntity.ok(exists);
     }
 
-    // Code của (Vu)
     // API lấy danh sách appointment theo doctor
     @GetMapping("/appointment/{doctorId}")
     public void getAppointmentsByDoctor(@PathVariable int doctorId) {
@@ -176,6 +175,5 @@ public class AppointmentController {
         Page<Appointment> appointments = appointmentService.getAppointmentByDoctorEmail(email, skip, size);
         return ResponseEntity.ok(appointments);
     }
-
 
 }

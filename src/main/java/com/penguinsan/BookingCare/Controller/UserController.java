@@ -44,7 +44,7 @@ public class UserController {
         return userService.getAllDoctor();
     }
 
-    // Tải ảnh lên (Doctor)
+    // Tải ảnh lên (Doctor) (ADMIN)
     @PostMapping(value = "doctor/add/image")
     public ResponseEntity<?> uploadImage(@RequestPart final MultipartFile file){
         CloudinaryResponse response = cloudinaryService.uploadFile(file, FOLDER_NAME);
@@ -62,11 +62,11 @@ public class UserController {
     @PutMapping("/doctor/update/{doctorId}")
     public void updateDoctor(@PathVariable int doctorId, @RequestBody DoctorRequestDTO doctorRequestDTO){userService.updateDoctor(doctorId,doctorRequestDTO);}
 
-    // Xóa một doctor (ADMIN)
-    @DeleteMapping("doctor/delete/{doctorId}")
-    public void deleteDoctor(@PathVariable int doctorId){
-        userService.deleteDoctor(doctorId);
-    }
+//    // Xóa một doctor (ADMIN)
+//    @DeleteMapping("doctor/delete/{doctorId}")
+//    public void deleteDoctor(@PathVariable int doctorId){
+//        userService.deleteDoctor(doctorId);
+//    }
 
     // Lấy ra các user là patient
     @GetMapping("patient")
@@ -93,6 +93,5 @@ public class UserController {
     public List<Users> findDoctorExperience() {
         return userService.findDoctorExperience();
     }
-
 
 }

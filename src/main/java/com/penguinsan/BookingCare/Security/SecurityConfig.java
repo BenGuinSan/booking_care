@@ -48,7 +48,11 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/google-login", "/api/auth/register").permitAll()
-                        .requestMatchers("/user/doctor/**").permitAll()
+                        .requestMatchers("/user/doctor/add/image").hasRole("ADMIN")
+                        .requestMatchers("/user/doctor/add").hasRole("ADMIN")
+                        .requestMatchers("/user/doctor/update/{doctorId}").hasRole("ADMIN")
+                        .requestMatchers("/user/doctorAll").hasRole("ADMIN")
+                        .requestMatchers("/user/doctor/experience").hasRole("ADMIN")
                         .requestMatchers("/schedules/**").permitAll()
                         .requestMatchers("/appointment/**").permitAll()
                         .requestMatchers("payment/**").permitAll()
