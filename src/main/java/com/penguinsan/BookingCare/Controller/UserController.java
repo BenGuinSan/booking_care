@@ -75,10 +75,23 @@ public class UserController {
         return userService.getAllPatient();
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("user/{id}")
+
+    @GetMapping("{id}")
     public Users getUserById(@PathVariable int id) {
         return userService.findUserById(id);
+    }
+
+    // get all bác sĩ
+    @GetMapping("/doctorAll")
+    public List<Users> findAllDoctor() {
+        return userService.findAllDoctor();
+    }
+
+
+    //lay bac si trên 5 năm kinh nghiệm
+    @GetMapping("/doctor/experience")
+    public List<Users> findDoctorExperience() {
+        return userService.findDoctorExperience();
     }
 
 

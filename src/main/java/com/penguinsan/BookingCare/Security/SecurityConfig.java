@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagementCustomizer -> sessionManagementCustomizer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/google-login", "/api/auth/register").permitAll()
                         .requestMatchers("/user/doctor/**").permitAll()
                         .requestMatchers("/schedules/**").permitAll()
                         .requestMatchers("/appointment/**").permitAll()

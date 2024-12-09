@@ -6,10 +6,14 @@ import com.penguinsan.BookingCare.Model.Users;
 import com.penguinsan.BookingCare.Service.SchedulesService;
 import com.penguinsan.BookingCare.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -64,5 +68,17 @@ public class SchedulesController {
         return "Edit schedule isbooked success";
     }
 
+//    @PostMapping("/generate-schedules")
+//    public String generateSchedules(@RequestParam int doctorId,
+//                                    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate startDate,
+//                                    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate endDate,
+//                                    @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
+//                                    @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime endTime,
+//                                    @RequestParam int duration,
+//                                    Model model) {
+//        schedulesService.generateSchedules(doctorId, startDate, endDate, startTime, endTime, duration);
+//        model.addAttribute("message", "Schedules generated successfully!");
+//        return "success"; // Replace "success" with your desired view name
+//    }
 
 }

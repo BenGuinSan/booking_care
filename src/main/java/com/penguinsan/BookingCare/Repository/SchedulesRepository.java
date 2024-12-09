@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -18,6 +19,8 @@ public interface SchedulesRepository extends JpaRepository<Schedules, Integer> {
             "ORDER BY s.start_time ASC")
     List<Schedules> getSchedulesByDoctorIdIsBooked(int id);
 
+//    @Query(value = "SELECT s FROM Schedules s WHERE s.user.user_Id = ?1 AND s.working_date = ?2")
+//    List<Schedules> findByDoctorIdAndWorkingDate(int doctor_id, LocalDate workingDate);
 
 
 }
