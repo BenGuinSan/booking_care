@@ -23,21 +23,21 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
 
     Boolean existsByEmail(String email);
 
-//    @Query(
-//            value = "SELECT * FROM USERS u WHERE u.Role_Id = 2",
-//            nativeQuery = true)
-//    List<Users> findAllDoctor();
-//
-//    @Query(
-//            value = "SELECT * FROM USERS u WHERE u.Role_Id = 3",
-//            nativeQuery = true)
-//    List<Users> findAllPatient();
-//
-//   //lấy thông tin của bác sĩ trên 5 năm kinh nghiệm
-//    @Query(
-//            value = "SELECT * FROM USERS u WHERE u.Experience > 5",
-//            nativeQuery = true)
-//    List<Users> findDoctorExperience();
+    @Query(
+            value = "SELECT u FROM Users u WHERE u.role.id = 3",
+            nativeQuery = true)
+    List<Users> findAllDoctor();
+
+    @Query(
+            value = "SELECT u FROM Users u WHERE u.role.id = 3",
+            nativeQuery = true)
+    List<Users> findAllPatient();
+
+   //lấy thông tin của bác sĩ trên 5 năm kinh nghiệm
+    @Query(
+            value = "SELECT u FROM Users u WHERE u.Experience >= 5",
+            nativeQuery = true)
+    List<Users> findDoctorExperience();
 
     @Modifying
     @Transactional

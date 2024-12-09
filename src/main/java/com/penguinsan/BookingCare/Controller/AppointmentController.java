@@ -52,9 +52,9 @@ public class AppointmentController {
 
     //lay tat ca lich kham
     @GetMapping("/all")
-    public ResponseEntity<List<Appointment>> getAllAppointments()
+    public ResponseEntity<Page<Appointment>> getAllAppointments(@RequestParam int skip, @RequestParam int size)
     {
-        List<Appointment> appointments = appointmentService.getAllAppointment();
+        Page<Appointment> appointments = appointmentService.getAllAppointment(skip, size);
         return ResponseEntity.ok(appointments);
     }
 
@@ -152,7 +152,7 @@ public class AppointmentController {
 
     // Code của (Vu)
     // API lấy danh sách appointment theo doctor
-    @GetMapping("/doctor/{doctorId}")
+    @GetMapping("/appointment/{doctorId}")
     public void getAppointmentsByDoctor(@PathVariable int doctorId) {
         appointmentService.getAppointmentsByDoctorId(doctorId);
     }
@@ -162,5 +162,20 @@ public class AppointmentController {
     public void deleteAppointment(@PathVariable int appointmentId) {
         appointmentService.deleteAppointment(appointmentId);
     }
+
+    // Lấy toàn bộ Appointment theo email bệnh nhân
+    @GetMapping("get-by-patient-email/{email}")
+    public ResponseEntity<List<Appointment>> getAppointmentPatientByEmail(@PathVariable String email){
+        List<Appointment> appointments = appointmentService.getAppointmentByPatientEmail(email);
+        return ResponseEntity.ok(appointments);
+    }
+
+    // Lấy toàn bộ Appointment theo email bác sĩ có phân trang
+    @GetMapping("get-by-doctor-email/{email}")
+    public ResponseEntity<Page<Appointment>> getAppointmentDoctorByEmail(@PathVariable String email, @RequestParam int skip, @RequestParam int size){
+        Page<Appointment> appointments = appointmentService.getAppointmentByDoctorEmail(email, skip, size);
+        return ResponseEntity.ok(appointments);
+    }
+
 
 }

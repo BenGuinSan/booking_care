@@ -31,7 +31,16 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Collectors;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -45,7 +54,7 @@ public class AuthController {
 
     @Autowired
     private JWTGenerator jwtGenerator;
-
+    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserService userService;
@@ -80,6 +89,68 @@ public class AuthController {
         return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
     }
 
+    @PostMapping("/google-login")
+    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> payload) {
+
+        String token = payload.get("token");
+
+        try {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    JacksonFactory.getDefaultInstance())
+                    .setAudience(Collections.singletonList("672269280943-jctta9al93k12ru6dmsgbvvc6lj87eb8.apps.googleusercontent.com"))
+                    .build();
+
+            GoogleIdToken idToken = verifier.verify(token);
+
+            if (idToken != null) {
+                GoogleIdToken.Payload googlePayload = idToken.getPayload();
+
+                // In ra thông tin payload
+                System.out.println("Google Token Verified Successfully");
+                System.out.println("Email: " + googlePayload.getEmail());
+                System.out.println("Email Verified: " + googlePayload.getEmailVerified());
+                System.out.println("Name: " + googlePayload.get("name"));
+                System.out.println("User ID: " + googlePayload.getSubject());
+
+                String email = googlePayload.getEmail();
+                boolean emailVerified = Boolean.valueOf(googlePayload.getEmailVerified());
+                String name = (String) googlePayload.get("name");
+
+                // Kiểm tra xem email đã tồn tại chưa
+                Optional<Users> userOptional = userService.findByEmail(email);
+                Users user = userOptional.orElse(null);
+
+                if (user == null) {
+                    // Nếu chưa, tạo user mới
+                    user = new Users();
+                    user.setEmail(email);
+                    user.setFullName(name);
+                    user.setPassword(""); // Không cần mật khẩu
+                    user.setAvailable(true);
+
+                    Roles role = roleService.findRoleById(patient); // Gán role mặc định
+                    user.setRole(role);
+                    userRepo.save(user);
+                }
+
+                // Tạo đối tượng Authentication từ email (không có mật khẩu)
+                Authentication authentication = new UsernamePasswordAuthenticationToken(email, null);
+
+                // Tạo JWT token bằng cách sử dụng đối tượng Authentication
+                String jwtToken = jwtGenerator.generateToken(authentication);
+
+                // Trả về JWT token
+                return ResponseEntity.ok(new AuthResponseDTO(jwtToken));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Google token");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Google login failed");
+        }
+    }
+
+
     @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO){
         if(userService.existsByEmail(registerDTO.getEmail()))
@@ -111,6 +182,7 @@ public class AuthController {
     }
 
     // Lay thong tin chi tiet user qua email
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{email}")
     public Object userDetail(Authentication authentication, @PathVariable String email){
         return userService.getUserDetails(email);

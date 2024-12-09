@@ -43,9 +43,6 @@ public class UserService {
     UsersRepository usersRepo;
 
     @Autowired
-    CustomUserRepository cusUsersRepo;
-
-    @Autowired
     private UserMapper userMapper;
 
     // Lấy toàn bộ User(DTO)
@@ -72,7 +69,7 @@ public class UserService {
 
     // Lấy toàn bộ Doctor: User có Role_Id = 2
     public List<DoctorDTO> getAllDoctor() {
-        var doctor = cusUsersRepo.findAllDoctor();
+        var doctor = usersRepo.findAllDoctor();
         List<DoctorDTO> doctorDTOs = doctor.stream()
                 .map(userMapper::toDoctorDTO)
                 .collect(Collectors.toList());
@@ -81,7 +78,7 @@ public class UserService {
 
     // Lấy toàn bộ Patient: User có Role_Id = 3
     public List<PatientDTO> getAllPatient() {
-        var patient = cusUsersRepo.findAllPatient();
+        var patient = usersRepo.findAllPatient();
         List<PatientDTO> patientDTOs = patient.stream()
                 .map(userMapper::toPatientDTO)
                 .collect(Collectors.toList());
@@ -149,12 +146,12 @@ public class UserService {
 
     // Lấy toàn bộ bác sĩ
     public List<Users> findAllDoctor() {
-        return cusUsersRepo.findAllDoctor();
+        return usersRepo.findAllDoctor();
     }
 
     // Lấy danh sach bác sĩ có kinh nghiệm trên 5 năm
     public List<Users> findDoctorExperience() {
-        return cusUsersRepo.findDoctorExperience();
+        return usersRepo.findDoctorExperience();
     }
 
     // Lay thong tin user.id theo email

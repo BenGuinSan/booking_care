@@ -19,14 +19,13 @@ public class Schedules {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int schedule_Id;
 
-
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "doctor_id")
     private Users user;
 
-
     private LocalDate working_date;
 
+    private int duration;
 
     private Time start_time;
 

@@ -25,6 +25,26 @@ public class AppointmentService {
         Pageable pageable = PageRequest.of(skip/size, size);
         return appointmentRepository.findByPatientId(patientId, pageable).getContent();
     }
+
+    public Page<Appointment> getAllAppointment(int skip, int size)
+    {
+        Pageable pageable = PageRequest.of(skip/size, size);
+        return appointmentRepository.findAll(pageable);
+    }
+
+    // lay lich hen kham theo email ben nhan
+    public List<Appointment> getAppointmentByPatientEmail(String patientEmail)
+    {
+//        Pageable pageable = PageRequest.of(skip/size, size);
+        return appointmentRepository.findByPatientEmail(patientEmail);
+    }
+
+    public Page<Appointment> getAppointmentByDoctorEmail(String doctorEmail, int skip, int size)
+    {
+        Pageable pageable = PageRequest.of(skip/size, size);
+        return appointmentRepository.findByDoctorEmail(doctorEmail, pageable);
+    }
+
     // lay lich hen theo id lich hen
     public Appointment getAppointmentById(int appointmentId) {
         return appointmentRepository.findById(appointmentId).orElse(null);
@@ -35,12 +55,6 @@ public class AppointmentService {
     {
         appointment = appointmentRepository.save(appointment);
         return appointment;
-    }
-
-    //lay tat ca lich kham
-    public List<Appointment> getAllAppointment()
-    {
-        return appointmentRepository.findAll();
     }
 
     public Page<Appointment> getAppointments(int page, int size) {

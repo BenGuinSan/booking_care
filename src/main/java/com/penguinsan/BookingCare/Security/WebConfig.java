@@ -24,6 +24,8 @@ public class WebConfig {
     @Value("${CLIENT_URL}")
     private String clientUrl;
 
+
+
     private static final Long MAX_AGE = 3600L;
     private static final int CORS_FILTER_ORDER = -102;
 

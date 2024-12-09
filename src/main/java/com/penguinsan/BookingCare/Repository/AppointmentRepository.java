@@ -23,11 +23,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     // Thêm phương thức tìm kiếm phân trang
     Page<Appointment> findAll(Pageable pageable);
 
+    // Tim kiem cac appointment co phan trang
+    @Query("SELECT a FROM Appointment a WHERE a.doctor.email = ?1 ORDER BY a.appointment_Date DESC")
+    Page<Appointment> findByDoctorEmail(String doctorEmail, Pageable pageable);
+
     @Query("SELECT a FROM Appointment a WHERE a.doctor.user_Id = :doctorId")
     List<Appointment> findByDoctorId(@Param("doctorId") int doctorId);
 
     @Query("SELECT a FROM Appointment a WHERE a.patient.user_Id = ?1 ORDER BY a.appointment_Date DESC")
     Page<Appointment> findByPatientId(int patientId, Pageable pageable);
+
+    // Co the la page
+    @Query("SELECT a FROM Appointment a WHERE a.patient.email = ?1 ORDER BY a.appointment_Date DESC")
+    List<Appointment> findByPatientEmail(String patientEmail);
 
     // đếm số lịch hẹn theo id benh nhan
     @Query("SELECT COUNT(a) FROM Appointment a WHERE a.patient.user_Id = ?1")
