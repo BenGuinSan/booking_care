@@ -37,6 +37,7 @@ public class JWTGenerator {
                 .compact();
         System.out.println("New token :");
         System.out.println(token);
+        System.out.println(authority);
         return token;
     }
 

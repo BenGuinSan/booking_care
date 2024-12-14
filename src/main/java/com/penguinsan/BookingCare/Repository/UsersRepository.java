@@ -24,40 +24,37 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
     Boolean existsByEmail(String email);
 
     @Query(
-            value = "SELECT u FROM Users u WHERE u.role.id = 3",
-            nativeQuery = true)
+            value = "SELECT u FROM Users u WHERE u.role.id = 2")
     List<Users> findAllDoctor();
 
     @Query(
-            value = "SELECT u FROM Users u WHERE u.role.id = 3",
-            nativeQuery = true)
+            value = "SELECT u FROM Users u WHERE u.role.id = 3")
     List<Users> findAllPatient();
 
    //lấy thông tin của bác sĩ trên 5 năm kinh nghiệm
     @Query(
-            value = "SELECT u FROM Users u WHERE u.Experience >= 5",
-            nativeQuery = true)
+            value = "SELECT u FROM Users u WHERE u.Experience >= 5")
     List<Users> findDoctorExperience();
 
     @Modifying
     @Transactional
-    @Query("UPDATE Users u SET u.fullName = :fullName, u.Password = :password, u.email = :email, u.Phone = :phone, " +
-            "u.Degree = :degree, u.Booking_Fee = :bookingFee, u.Image = :image, u.Gender = :gender, " +
-            "u.address = :address, u.DateOfBirth = :dateOfBirth, u.Experience = :experience, " +
-            "u.specialization = :specialization WHERE u.user_Id = :userId AND u.role.role_Id = 2")
+    @Query("UPDATE Users u SET u.fullName = :fullName, u.Booking_Fee = :bookingFee, u.specialization = :specialization WHERE u.user_Id = :userId AND u.role.role_Id = 2")
     int updateDoctor(
             @Param("userId") int userId,
             @Param("fullName") String fullName,
-            @Param("password") String password,
-            @Param("email") String email,
-            @Param("phone") String phone,
-            @Param("degree") String degree,
             @Param("bookingFee") float bookingFee,
-            @Param("image") String image,
+            @Param("specialization") Specializations specialization
+    );
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Users u SET u.fullName = :fullName, u.Phone = :phone, u.address = :address, u.Gender = :gender, u.DateOfBirth = :dateOfBirth WHERE u.email = :email AND u.role.role_Id = 3")
+    int updatePatient(
+            @Param("email") String email,
+            @Param("fullName") String fullName,
+            @Param("phone") String phone,
             @Param("gender") boolean gender,
             @Param("address") String address,
-            @Param("dateOfBirth") Date DateOfBirth,
-            @Param("experience") Integer experience,
-            @Param("specialization") Specializations specialization
+            @Param("dateOfBirth") Date DateOfBirth
     );
 }

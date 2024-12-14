@@ -1,6 +1,9 @@
 package com.penguinsan.BookingCare.Repository;
 
+import com.penguinsan.BookingCare.Model.Appointment;
 import com.penguinsan.BookingCare.Model.Schedules;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,8 +22,8 @@ public interface SchedulesRepository extends JpaRepository<Schedules, Integer> {
             "ORDER BY s.start_time ASC")
     List<Schedules> getSchedulesByDoctorIdIsBooked(int id);
 
-//    @Query(value = "SELECT s FROM Schedules s WHERE s.user.user_Id = ?1 AND s.working_date = ?2")
-//    List<Schedules> findByDoctorIdAndWorkingDate(int doctor_id, LocalDate workingDate);
+    @Query("SELECT a FROM Schedules a WHERE a.user.email = ?1 ORDER BY a.working_date DESC")
+    Page<Schedules> findByDoctorEmail(String doctorEmail, Pageable pageable);
 
 
 }

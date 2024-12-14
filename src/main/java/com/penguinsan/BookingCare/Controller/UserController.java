@@ -60,7 +60,10 @@ public class UserController {
 
     // Chỉnh sửa thông tin doctor (ADMIN)
     @PutMapping("/doctor/update/{doctorId}")
-    public void updateDoctor(@PathVariable int doctorId, @RequestBody DoctorRequestDTO doctorRequestDTO){userService.updateDoctor(doctorId,doctorRequestDTO);}
+    public void updateDoctor(@PathVariable int doctorId, @RequestBody UpdateDoctorRequestDTO updateDoctorRequestDTO){userService.updateDoctor(doctorId,updateDoctorRequestDTO);}
+
+    @PutMapping("/patient/update/{email}")
+    public void updatePatient(@PathVariable String patientEmail, @RequestBody UpdatePatientRequestDTO updatePatientRequestDTO){userService.updatePatient(patientEmail, updatePatientRequestDTO);}
 
 //    // Xóa một doctor (ADMIN)
 //    @DeleteMapping("doctor/delete/{doctorId}")

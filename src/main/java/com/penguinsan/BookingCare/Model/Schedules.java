@@ -25,11 +25,11 @@ public class Schedules {
 
     private LocalDate working_date;
 
-    private int duration;
+    private int Duration;
 
-    private Time start_time;
+    private LocalTime start_time;
 
-    private Time end_time;
+    private LocalTime end_time;
 
     private boolean is_booked;
 }
