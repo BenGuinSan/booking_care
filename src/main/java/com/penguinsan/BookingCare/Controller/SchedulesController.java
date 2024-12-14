@@ -1,13 +1,17 @@
 package com.penguinsan.BookingCare.Controller;
 
 
+import com.penguinsan.BookingCare.DTO.SchedulesRequestDTO;
+import com.penguinsan.BookingCare.Model.Appointment;
 import com.penguinsan.BookingCare.Model.Schedules;
 import com.penguinsan.BookingCare.Model.Users;
 import com.penguinsan.BookingCare.Service.SchedulesService;
 import com.penguinsan.BookingCare.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,7 +46,6 @@ public class SchedulesController {
 
     // Thêm lịch khám
     @PostMapping("/add/{id}")
-    @CrossOrigin(origins = "http://localhost:5173")
     @ResponseStatus(HttpStatus.CREATED)
     public String addSchedule(@RequestBody Schedules schedules, @PathVariable int id) {
         Users doctor = userService.findUserById(id);
@@ -68,17 +71,16 @@ public class SchedulesController {
         return "Edit schedule isbooked success";
     }
 
-//    @PostMapping("/generate-schedules")
-//    public String generateSchedules(@RequestParam int doctorId,
-//                                    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate startDate,
-//                                    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate endDate,
-//                                    @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
-//                                    @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime endTime,
-//                                    @RequestParam int duration,
-//                                    Model model) {
-//        schedulesService.generateSchedules(doctorId, startDate, endDate, startTime, endTime, duration);
-//        model.addAttribute("message", "Schedules generated successfully!");
-//        return "success"; // Replace "success" with your desired view name
-//    }
+    @GetMapping("get-by-doctor-email/{email}")
+    public ResponseEntity<Page<Schedules>> getSchedulesDoctorByEmail(@PathVariable String email, @RequestParam int skip, @RequestParam int size){
+        Page<Schedules> schedules = schedulesService.getSchedulesByDoctorEmail(email, skip, size);
+        return ResponseEntity.ok(schedules);
+    }
+
+    @PostMapping("/new/{id}")
+    public ResponseEntity<String> addNewSchedule(@RequestBody SchedulesRequestDTO schedulesRequestDTO, @PathVariable int id){
+        schedulesService.addNewSchedule(schedulesRequestDTO, id);
+        return ResponseEntity.ok("Add new Schedule Suc");
+    }
 
 }

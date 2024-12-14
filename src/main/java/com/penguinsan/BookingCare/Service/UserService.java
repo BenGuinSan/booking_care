@@ -1,9 +1,6 @@
 package com.penguinsan.BookingCare.Service;
 
-import com.penguinsan.BookingCare.DTO.DoctorDTO;
-import com.penguinsan.BookingCare.DTO.DoctorRequestDTO;
-import com.penguinsan.BookingCare.DTO.PatientDTO;
-import com.penguinsan.BookingCare.DTO.UserDTO;
+import com.penguinsan.BookingCare.DTO.*;
 import com.penguinsan.BookingCare.Mapper.UserMapper;
 import com.penguinsan.BookingCare.Model.Clinics;
 import com.penguinsan.BookingCare.Model.Roles;
@@ -133,7 +130,7 @@ public class UserService {
         usersRepo.save(user);
     }
 
-    // Xóa một người dùng (bác sĩ/bệnh nhân)
+    // Xóa một người dùng (bác sĩ)
     public void deleteDoctor(int doctorId) {
         Optional<Users> optionalDoctorToDelete = usersRepo.findById(doctorId);
         if (optionalDoctorToDelete.isPresent()) {
@@ -165,20 +162,27 @@ public class UserService {
 //        return specializationRepo.getSpecializationsByName(name);
 //    }
 
-    public boolean updateDoctor(int userId, DoctorRequestDTO doctorRequestDTO) {
+    public boolean updateDoctor(int userId, UpdateDoctorRequestDTO updateDoctorRequestDTO) {
         // Tìm kiếm specialization
-        Specializations specialization  = specializationRepo.getSpecializationsByName(doctorRequestDTO.getSpecialization()).orElse(null);
+        Specializations specialization  = specializationRepo.getSpecializationsByName(updateDoctorRequestDTO.getSpecialization()).orElse(null);
         // Kiểm tra nếu tìm thấy specialization
         if (specialization == null) {
             return false; // Specialization not found
         }
 
         // Cập nhật thông tin bác sĩ
-        int rowsUpdated = usersRepo.updateDoctor(userId, doctorRequestDTO.getFullName(), doctorRequestDTO.getPassword(), doctorRequestDTO.getEmail(), doctorRequestDTO.getPhone(),
-                doctorRequestDTO.getDegree(), doctorRequestDTO.getBooking_Fee() , doctorRequestDTO.getImageUrl(),doctorRequestDTO.isGender(), doctorRequestDTO.getAddress(), doctorRequestDTO.getDateOfBirth(), doctorRequestDTO.getExperience(),
+        int rowsUpdated = usersRepo.updateDoctor(userId, updateDoctorRequestDTO.getFullName(),
+                updateDoctorRequestDTO.getBooking_Fee(),
                 specialization);
 
         return rowsUpdated > 0; // Trả về true nếu có ít nhất 1 dòng được cập nhật
+    }
+
+    public boolean updatePatient(String patientEmail, UpdatePatientRequestDTO updatePatientRequestDTO){
+        int rowUpdate = usersRepo.updatePatient(patientEmail, updatePatientRequestDTO.getFullName(),
+                updatePatientRequestDTO.getPhone(), updatePatientRequestDTO.isGender(), updatePatientRequestDTO.getAddress(), updatePatientRequestDTO.getDateOfBirth());
+
+        return rowUpdate > 0;
     }
 
 }

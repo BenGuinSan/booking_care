@@ -46,6 +46,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     // Chuyển đổi vai trò của người dùng (được lưu trữ dưới dạng Role) thành một danh sách các quyền hạn (GrantedAuthority) mà Spring Security có thể hiểu
     private Collection<GrantedAuthority> mapRolesToAuthorities(Roles role) {
-        return Collections.singletonList(new SimpleGrantedAuthority(role.getName()));
+        return Collections.singletonList(new SimpleGrantedAuthority(role.getName().replace("ROLE_","")));
     }
 }
